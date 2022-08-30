@@ -1,7 +1,7 @@
 program ej2;
 const
 	
-	dimF = 5;
+	dimF = 300;
 
 type
 	rango1 = 0..dimF;
