@@ -32,22 +32,23 @@ type
 	meses = array [rango] of lista;
 
 
-procedure inicialiarLista (var pI: lista); 
+procedure inicialiarLista (var v: meses); 
 var
 	i: integer; 
 begin 
 	for i:= 1 to max do begin
-		pI:= nil; 
+		v[i]:= nil; 
 	end; 
 end; 
 
-procedure cargarVector (var v:meses; var pI: lista);
+procedure cargarVector (var v:meses);
 
 		procedure leer (var p: prestamo); 
 		begin 
 			with p do begin 
 				writeln('Ingrese el ISBN: ');
 				readln(isbn); 
+				if (p.isbn <> -1) then begin 
 				writeln('Ingrese el numero de socio: ');
 				readln(num); 
 				writeln('Ingrese el dia: ');
@@ -56,28 +57,29 @@ procedure cargarVector (var v:meses; var pI: lista);
 				readln(mes); 
 				writeln('Ingrese la cantidad de dias prestados: ');				
 				readln(cantD); 
+				end;
 			end;
 		end;
 		
-		procedure insertar (var pI: lista; valor: integer);
+		procedure insertar (var pI: lista; p: prestamo);
 		var
 		nuevo, actual, ant: lista;
 		begin
 			new (nuevo);
-			nuevo^.dato:= valor;
+			nuevo^.dato:= p;
 			nuevo^.sig:= nil;
 			if (pI = nil) then {caso 1}
-			pI:= nuevo
+			v[p.mes]:= nuevo
 			else begin
 			actual:= pI;
 			ant:= pI;
-			while (actual <> nil) and (actual^.dato < nuevo^.dato) do begin
+			while (actual <> nil) and (actual^.dato.isbn < nuevo^.dato.isbn) do begin
 				ant:= actual; {busco la posicion}
-				actual:= actual^.sig
+				actual:= actual^.sig;
 			end;
 			if (actual = pI) then {caso 2}
 			begin
-				nuevo^.sig = pI;
+				nuevo^.sig := pI;
 				pI:= nuevo;
 			end
 			else  {caso 3 y 4 (actual <> nil)}
@@ -92,10 +94,9 @@ var
 	p: prestamo; 
 	
 begin 
-	
 	leer(p); 
 	while (p.isbn <> -1) do begin 
-		insertar(v[p.isbn].pI, p.isbn); 
+		insertar(v[p.mes], p); 
 		leer(p);
 	end; 
 end;
@@ -106,7 +107,9 @@ procedure informarRecursivo (v: meses);
 	procedure informarLista (pI: lista);
 	begin
 		if (pI <> nil) then begin
+			writeln('ISBN: ');
 			writeln(pI^.dato.isbn);
+			writeln('Numero de socio: ');			
 			writeln(pI^.dato.num);
 			informarLista(pI^.sig);
 		end;
@@ -117,17 +120,14 @@ var
 	i: integer;
 begin
 	for i:= 1 to max do
-		informarLista(v[i].pI);
+		informarLista(v[i]);
 end;
 
 var
 v: meses;
-pI: lista;
-i: integer;
 begin
-	for i:= 1 to max do
-	inicialiarLista(v[i]);
-	cargarVector(v,pI);
+	inicialiarLista(v);
+	cargarVector(v);
 	informarRecursivo(v);
 end.
 		
