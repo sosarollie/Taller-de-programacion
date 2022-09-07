@@ -361,9 +361,9 @@ Informe los números de socio en orden creciente.
 }
 begin
 	if (a <> nil) then begin 
-		InformarNumerosSociosOrdenDeCreciente(a^.HI); 
 		InformarNumerosSociosOrdenDeCreciente(a^.HD);
 		write(a^.dato.numero, ' ');
+		InformarNumerosSociosOrdenDeCreciente(a^.HI); 
 	end; 
 end; 
 
