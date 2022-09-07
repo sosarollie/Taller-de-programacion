@@ -316,13 +316,29 @@ procedure InformarCantidadSociosEnRango (a: arbol);
 Informe, a partir de dos valores que se leen, la cantidad de socios en el árbol cuyo número de socio se encuentra entre los dos valores ingresados. 
 * Debe invocar a un módulo recursivo que reciba los dos valores leídos y retorne dicha cantidad.
 }
+{
 	procedure contar (a: arbol; var cant: integer; n1,n2: integer); 
 	begin 
 		if (a <> nil) then begin 
 			contar(a^.HI, cant, n1, n2);
-			if (a^.dato.numero > n1) and (a^.dato.numero < n2) then 
+			if (a^.dato.numero >= n1) and (a^.dato.numero =< n2) then 
 				cant:= cant + 1;  
 			contar(a^.HD, cant, n1, n2); 
+		end;
+	end; 
+}
+	
+	procedure contar (a: arbol; var cant: integer; n1,n2: integer); 
+	begin 
+		if (a <> nil) then begin 
+			if (a^.dato.numero >= n1) and (a^.dato.numero <= n2) then begin
+				cant:= cant + 1;
+				contar(a^.HI, cant, n1, n2);
+				contar(a^.HD, cant, n1, n2); 
+			end else if (a^.dato.numero < n1) then
+				contar(a^.HD, cant, n1, n2)
+			else					
+				contar(a^.HI, cant, n1, n2); 
 		end;
 	end; 
 
@@ -385,14 +401,14 @@ Begin
 
 	InformarExistenciaNombreSocio (a);
 	InformarCantidadSocios(a);
-	InformarPromedioDeEdad (a);
+	InformarPromedioDeEdad (a);}
 	InformarCantidadSociosEnRango (a);
-	writeln('-----------------');
+	{writeln('-----------------');
     
     
     InformarNumerosSociosOrdenCreciente (a);
     writeln('-----------------');
-}
-    InformarNumerosSociosOrdenDeCreciente (a);
+
+    InformarNumerosSociosOrdenDeCreciente (a);}
  
 End.
