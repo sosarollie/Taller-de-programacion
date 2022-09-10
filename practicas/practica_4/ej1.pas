@@ -135,37 +135,28 @@ end;
 procedure merge (v: meses);
 	
 	procedure minimo(var v: meses; var  minP: prestamo; var min: integer);
-	var
-	i: integer;
+	Var
+	indiceMin,i:integer;
 	Begin
 	  min:= 32000;
-	  for i:= 1 to max-1 do begin
-		if (v[i] <> nil) and (v[i+1] <> nil) then
-			if (v[i]^.dato.isbn <= v[i+1]^.dato.isbn ) then begin
-	           min:= v[i]^.dato.isbn;
-	           minP:= v[i]^.dato;
-	           v[i]:= v[i]^.sig;
-	         end 
-	         else begin
-				min:= v[i+1]^.dato.isbn;
-				minP:= v[i+1]^.dato;
-				v[i+1]:= v[i+1]^.sig;
-			 end else if (v[i] <> nil) and (v[i+1] = nil) then begin
-						min:= v[i]^.dato.isbn;
-						minP:= v[i]^.dato;
-						v[i]:= v[i]^.sig;
-						end else if (v[i] = nil) and (v[i+1] <> nil) then begin
-									min:= v[i+1]^.dato.isbn;
-									minP:= v[i+1]^.dato;
-									v[i+1]:= v[i+1]^.sig; 
-						end;
-	    end;
-	  end;		
+	  for i:= 1 to max do
+	     if (v[i] <> nil) then 
+	      if (v[i]^.dato.isbn <= min) then begin
+				indiceMin:= i;
+				minp:= v[i]^.dato;  
+				min:= v[i]^.dato.isbn;
+			 end; 
+		  if (min <> 32000) then 
+		    begin
+		      minP:= v[indiceMin]^.dato;
+		      v[indiceMin]:= v[indiceMin]^.sig;
+		    end;
+	End;		
 
 	procedure agregarAtras (var pI,pU: lista; p:prestamo);
-var
+	var
 	nuevo: lista;
-begin
+	begin
 	new (nuevo);
 	nuevo^.dato:= p;
 	nuevo^.sig:= nil;
@@ -177,7 +168,8 @@ begin
 		pU^.sig:= nuevo;
 		pU:= nuevo;
 	end;
-end;
+	end;
+	
 	procedure informarLista (pI: lista);
 	begin
 		if (pI <> nil) then begin
@@ -192,23 +184,96 @@ end;
 	end;
 
 var
-pri: lista;
-pU: lista;
-minP: prestamo;	
-min: integer;	
+	pINuevo: lista;
+	pUNuevo: lista;
+	minP: prestamo;	
+	min: integer;	
 begin
-pU:= nil;
-pri:= nil;
-minimo (v, minP,min);
-while (min <> 32000) do begin
-	agregarAtras(pri,pU, minP);
-	minimo(v, minP, min);
+	pUNuevo:= nil;
+	pINuevo:= nil;
+	minimo (v, minP,min);
+	while (min <> 32000) do begin
+		agregarAtras(pINuevo,pUNuevo, minP);
+		minimo(v, minP, min);
+	end;
+	informarLista(pINuevo);
 end;
-informarLista(pri);
+
+
+procedure mergeAcumulador (v: meses);
+	
+	procedure minimo(var v: meses; var  minP: prestamo; var min,dias: integer);
+	Var
+	indiceMin,i:integer;
+	Begin
+	  min:= 32000;
+	  for i:= 1 to max do
+	     if (v[i] <> nil) then 
+	      if (v[i]^.dato.isbn <= min) then begin
+				indiceMin:= i;
+				minp:= v[i]^.dato;  
+				min:= v[i]^.dato.isbn;
+			 end; 
+		  if (min <> 32000) then 
+		    begin
+		      minP:= v[indiceMin]^.dato;
+		      dias:= v[indiceMin]^.dato.cantD;
+		      v[indiceMin]:= v[indiceMin]^.sig;
+		    end;
+	End;		
+
+	procedure agregarAtras (var pI,pU: lista; p:prestamo);
+	var
+	nuevo: lista;
+	begin
+	new (nuevo);
+	nuevo^.dato:= p;
+	nuevo^.sig:= nil;
+	if (pI = nil) then begin
+		pI:= nuevo;
+		pU:= nuevo;
+	end
+	else begin
+		pU^.sig:= nuevo;
+		pU:= nuevo;
+	end;
+	end;
+	
+	procedure informarLista (pI: lista; diasT: integer);
+	begin
+		if (pI <> nil) then begin
+			writeln;
+			write('ISBN: ');
+			writeln(pI^.dato.isbn);
+			write('Cant total de dias prestados para este ISBN: ');
+			writeln(diasT);
+			write('Numero de socio: ');			
+			writeln(pI^.dato.num);
+			writeln;
+			informarLista(pI^.sig, diasT);
+		end;
+	end;
+
+var
+	pINuevo: lista;
+	pUNuevo: lista;
+	minP: prestamo;	
+	min,actual,dias,diasT: integer;
+begin
+	pUNuevo:= nil;
+	pINuevo:= nil;
+	minimo (v, minP,min,dias);
+	while (min <> 32000) do begin
+		actual:= minP.isbn;
+		diasT:= 0;
+		while ((min <> 32000) and (minP.isbn = actual)) do begin 
+			minimo(v, minP, min,dias);
+			diasT:= diasT + dias;
+		end;
+		agregarAtras(pINuevo,pUNuevo, minP);
+		informarLista(pINuevo,diasT);
+	end;
 end;
-
-
-
 
 
 var
@@ -218,6 +283,7 @@ begin
 	cargarVector(v);
 	informarRecursivo(v);
 	merge(v);
+	mergeAcumulador(v);
 end.
 		
 
