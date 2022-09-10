@@ -107,10 +107,12 @@ procedure informarRecursivo (v: meses);
 	procedure informarLista (pI: lista);
 	begin
 		if (pI <> nil) then begin
-			writeln('ISBN: ');
+			writeln;
+			write('ISBN: ');
 			writeln(pI^.dato.isbn);
-			writeln('Numero de socio: ');			
+			write('Numero de socio: ');			
 			writeln(pI^.dato.num);
+			writeln;
 			informarLista(pI^.sig);
 		end;
 	end;
@@ -119,9 +121,95 @@ procedure informarRecursivo (v: meses);
 var
 	i: integer;
 begin
-	for i:= 1 to max do
-		informarLista(v[i]);
+	for i:= 1 to max do begin
+		if (v[i] <> nil) then begin
+			writeln('-----------');	
+			writeln;	
+			writeln('Para el mes ',i,': ');		
+			informarLista(v[i]);
+		end;
+	end;
 end;
+
+
+procedure merge (v: meses);
+	
+	procedure minimo(var v: meses; var  minP: prestamo; var min: integer);
+	var
+	i: integer;
+	Begin
+	  min:= 32000;
+	  for i:= 1 to max-1 do begin
+		if (v[i] <> nil) and (v[i+1] <> nil) then
+			if (v[i]^.dato.isbn <= v[i+1]^.dato.isbn ) then begin
+	           min:= v[i]^.dato.isbn;
+	           minP:= v[i]^.dato;
+	           v[i]:= v[i]^.sig;
+	         end 
+	         else begin
+				min:= v[i+1]^.dato.isbn;
+				minP:= v[i+1]^.dato;
+				v[i+1]:= v[i+1]^.sig;
+			 end else if (v[i] <> nil) and (v[i+1] = nil) then begin
+						min:= v[i]^.dato.isbn;
+						minP:= v[i]^.dato;
+						v[i]:= v[i]^.sig;
+						end else if (v[i] = nil) and (v[i+1] <> nil) then begin
+									min:= v[i+1]^.dato.isbn;
+									minP:= v[i+1]^.dato;
+									v[i+1]:= v[i+1]^.sig; 
+						end;
+	    end;
+	  end;		
+
+	procedure agregarAtras (var pI,pU: lista; p:prestamo);
+var
+	nuevo: lista;
+begin
+	new (nuevo);
+	nuevo^.dato:= p;
+	nuevo^.sig:= nil;
+	if (pI = nil) then begin
+		pI:= nuevo;
+		pU:= nuevo;
+	end
+	else begin
+		pU^.sig:= nuevo;
+		pU:= nuevo;
+	end;
+end;
+	procedure informarLista (pI: lista);
+	begin
+		if (pI <> nil) then begin
+			writeln;
+			write('(merge)ISBN: ');
+			writeln(pI^.dato.isbn);
+			write('(merge)Numero de socio: ');			
+			writeln(pI^.dato.num);
+			writeln;
+			informarLista(pI^.sig);
+		end;
+	end;
+
+var
+pri: lista;
+pU: lista;
+minP: prestamo;	
+min: integer;	
+begin
+pU:= nil;
+pri:= nil;
+minimo (v, minP,min);
+while (min <> 32000) do begin
+	agregarAtras(pri,pU, minP);
+	minimo(v, minP, min);
+end;
+informarLista(pri);
+end;
+
+
+
+
 
 var
 v: meses;
@@ -129,6 +217,7 @@ begin
 	inicialiarLista(v);
 	cargarVector(v);
 	informarRecursivo(v);
+	merge(v);
 end.
 		
 
