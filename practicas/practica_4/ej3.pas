@@ -55,7 +55,7 @@ procedure cargarVector (var v: vSucursal);
 			readln(mes);
 			writeln('Ingrese el codigo de producto: ');
 			readln(codP);
-			while (codP <> -1) do begin
+			if (codP <> -1) then begin
 				writeln('Ingrese el codigo de sucursal: ');
 				readln(codS);
 				writeln('Ingrese la cantidad vendida: ');
