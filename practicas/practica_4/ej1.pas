@@ -30,6 +30,18 @@ type
 	end;
 
 	meses = array [rango] of lista;
+		
+	acumulador = record
+		isbn: integer;
+		diasT: integer;
+	end;
+	
+	listaA = ^nodo2;
+	nodo2 = record
+		dato: acumulador;
+		sig: listaA;
+	end;
+
 
 
 procedure inicialiarLista (var v: meses); 
@@ -202,32 +214,32 @@ end;
 
 procedure mergeAcumulador (v: meses);
 	
-	procedure minimo(var v: meses; var  minP: prestamo; var min,dias: integer);
+	procedure minimo(var v: meses; var  isbnMin: integer; var min,dias: integer);
 	Var
 	indiceMin,i:integer;
 	Begin
-	  min:= 32000;
+	  isbnMin:= 32000;
 	  for i:= 1 to max do
 	     if (v[i] <> nil) then 
-	      if (v[i]^.dato.isbn <= min) then begin
+	      if (v[i]^.dato.isbn <= isbnMin) then begin
 				indiceMin:= i;
-				minp:= v[i]^.dato;  
-				min:= v[i]^.dato.isbn;
+				isbnMin:= v[i]^.dato.isbn;  
 			 end; 
-		  if (min <> 32000) then 
+		  if (isbnMin <> 32000) then 
 		    begin
-		      minP:= v[indiceMin]^.dato;
-		      dias:= v[indiceMin]^.dato.cantD;
+		      isbnMin:= v[indiceMin]^.dato.isbn;
+		      dias:= v[indiceMin]^.dato.diasT;
 		      v[indiceMin]:= v[indiceMin]^.sig;
 		    end;
 	End;		
 
-	procedure agregarAtras (var pI,pU: lista; p:prestamo);
+	procedure agregarAtras (var pI,pU: lista; isbnMin, diasT: acumulador );
 	var
 	nuevo: lista;
 	begin
 	new (nuevo);
-	nuevo^.dato:= p;
+	nuevo^.dato.isbn:= isbnMin;
+	nuevo^.dato.diasT:= diasT;
 	nuevo^.sig:= nil;
 	if (pI = nil) then begin
 		pI:= nuevo;
@@ -257,21 +269,21 @@ procedure mergeAcumulador (v: meses);
 var
 	pINuevo: lista;
 	pUNuevo: lista;
-	minP: prestamo;	
+	isbnMin: acumulador;	
 	min,actual,dias,diasT: integer;
 begin
 	pUNuevo:= nil;
 	pINuevo:= nil;
-	minimo (v, minP,min,dias);
+	minimo (v, isbnMin,min,dias);
 	while (min <> 32000) do begin
-		actual:= minP.isbn;
+		actual:= isbnMin.isbn;
 		diasT:= 0;
-		while ((min <> 32000) and (minP.isbn = actual)) do begin 
-			minimo(v, minP, min,dias);
+		while ((min <> 32000) and (isbnMin.isbn = actual)) do begin 
+			minimo(v, isbnMin, min,dias);
 			diasT:= diasT + dias;
 		end;
-		agregarAtras(pINuevo,pUNuevo, minP);
-		informarLista(pINuevo,diasT);
+		agregarAtras(pINuevo, pUNuevo, isbnMin, diasT);
+		informarLista(pINuevo);
 	end;
 end;
 
