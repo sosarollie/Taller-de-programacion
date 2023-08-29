@@ -7,7 +7,7 @@ program ej3;
 const
 	maxRango = 4;
 type
-	rango = 1..maxRango;
+	rango = 0..maxRango;
 	
 	venta = record
 		dia: integer;
@@ -49,17 +49,20 @@ procedure cargarVector (var v: vSucursal);
 	procedure leer (var ve: venta);
 	begin
 		with ve do begin
-			writeln('Ingrese el dia de la venta: ');
-			readln(dia);
-			writeln('Ingrese el mes de la venta: ');
-			readln(mes);
-			writeln('Ingrese el codigo de producto: ');
-			readln(codP);
-			if (codP <> -1) then begin
-				writeln('Ingrese el codigo de sucursal: ');
-				readln(codS);
-				writeln('Ingrese la cantidad vendida: ');
-				readln(cantVen);
+			write('Ingrese el codigo de sucursal: ');
+			readln(codS);
+			if (codS <> 0) then begin
+				write('Ingrese el dia de la venta: ');
+				dia:= random (31);
+				writeln(dia);
+				write('Ingrese el mes de la venta: ');
+				mes:= random (12);
+				writeln(mes);
+				write('Ingrese el codigo de producto: ');
+				readln(codP);
+				write('Ingrese la cantidad vendida: ');
+				cantVen:= random (100) + 100;
+				writeln(cantVen);
 			end;
 		end;
 	end;
@@ -72,7 +75,7 @@ procedure cargarVector (var v: vSucursal);
 	nuevo^.dato:= ve;
 	nuevo^.sig:= nil;
 	if (pI = nil) then
-		v[ve.codS]:= nuevo
+		pI:= nuevo
 	else begin
 		act:= pI;
 		ant:= pI;
@@ -94,28 +97,28 @@ var
 	ve: venta;
 begin
 	leer(ve);
-	while (ve.codP <> -1) do begin
+	while (ve.codS <> 0) do begin
 		insertar(v[ve.codS],ve);
 		leer(ve);
 	end;
 end;
 
-procedure mergeAcumulador (v: vSucursal; var pI,pU: lista2);
+procedure mergeAcumulador (v: vSucursal);
 	
-	procedure minimo (var v: vSucursal; var codMin: integer; var cantVen: integer);
+	procedure minimo (var v: vSucursal; var codMin: integer; var cantV: integer);
 	var
 	 indiceMin,i: integer;
 	begin
-		codMin:= 32000;
+		codMin:= 32000; indiceMin:= -1;
 		for i:= 1 to maxRango do
 			if (v[i] <> nil) then
 				if (v[i]^.dato.codP <= codMin) then begin
-					indiceMIn:= i;
+					indiceMin:= i;
 					codMin:= v[i]^.dato.codP;
 				end;
-		if (codMin <> 32000) then begin
+		if (indiceMin <> -1) then begin
 			codMin:= v[indiceMin]^.dato.codP;
-			cantVen:= v[indiceMin]^.dato.cantVen;
+			cantV:= v[indiceMin]^.dato.cantVen;
 			v[indiceMin]:= v[indiceMin]^.sig;
 		end;
 	end;
@@ -152,32 +155,30 @@ procedure mergeAcumulador (v: vSucursal; var pI,pU: lista2);
 	end;
 	
 var
- codmin,cantVen,act,cant: integer;
+ codmin,cantTotal,act,cant: integer;
+ pI,pU: lista2;
 begin
 	pI:= nil;
 	pU:= nil;
-	cant:= 0;
 	minimo(v, codMin, cant);
 	while (codMin <> 32000) do begin
 		act:= codMin;
-		cantVen:= 0;
+		cantTotal:= 0;
 		while (codMin <> 32000) and (codMin = act) do begin
-			cantVen:= cantVen + cant;
-			minimo(v, act, cant);
+			cantTotal:= cantTotal + cant;
+			minimo(v, codMin, cant);
 		end;
-		agregarAtras(pI,pU,codMin,cantVen);
+		agregarAtras(pI,pU,act,cantTotal);
 	end;
 	informarLista(pI);
 end;
 
 var
  v: vSucursal;
- pI: lista2;
- pU: lista2;
 begin
 	inicializarListas(v);
 	cargarVector(v);
-	mergeAcumulador(v,pI,pU);
+	mergeAcumulador(v);
 end.
 		
 	
