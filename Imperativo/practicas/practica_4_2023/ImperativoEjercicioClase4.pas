@@ -194,9 +194,7 @@ comprendidos entre los dos valores recibidos (sin incluir). }
   begin
 	if (a <> nil) and (a^.dato.codigo > codigo1) and (a^.dato.codigo < codigo2) then
 		ObtenerMontoTotalEntreDosCodigos:= a^.dato.montoTotal + ObtenerMontoTotalEntreDosCodigos(a^.HI, codigo1, codigo2) + ObtenerMontoTotalEntreDosCodigos(a^.HD, codigo1, codigo2)
-{
 	else ObtenerMontoTotalEntreDosCodigos:= 0;
-}
   end;
    
 var codigo1, codigo2: integer;
