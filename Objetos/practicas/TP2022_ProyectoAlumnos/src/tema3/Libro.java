@@ -9,7 +9,7 @@ package tema3;
  */
 public class Libro {
    private String titulo;
-   private Autor primerAutor; 
+   private String primerAutor; 
    private String editorial;
    private int añoEdicion;
    private String ISBN; 
@@ -17,7 +17,7 @@ public class Libro {
      
     
     public Libro(  String unTitulo,  String unaEditorial, 
-    int unAñoEdicion,  Autor unPrimerAutor, String unISBN, double unPrecio){
+    int unAñoEdicion,  String unPrimerAutor, String unISBN, double unPrecio){
          titulo = unTitulo;
          editorial = unaEditorial; 
          añoEdicion= unAñoEdicion;
@@ -26,7 +26,7 @@ public class Libro {
          precio = unPrecio;
     }
     
-    public Libro(  String unTitulo,  String unaEditorial, Autor unPrimerAutor, String unISBN){
+    public Libro(  String unTitulo,  String unaEditorial, String unPrimerAutor, String unISBN){
          titulo = unTitulo;
          editorial = unaEditorial; 
          añoEdicion= 2015;
@@ -50,7 +50,7 @@ public class Libro {
         return añoEdicion;
     }
   
-    public Autor getPrimerAutor(){
+    public String getPrimerAutor(){
         return primerAutor;
     } 
     public String getISBN(){
@@ -71,7 +71,7 @@ public class Libro {
          añoEdicion = unAño;
     }
    
-    public void setPrimerAutor(Autor unPrimerAutor){
+    public void setPrimerAutor(String unPrimerAutor){
          primerAutor=unPrimerAutor;
     } 
     public void setISBN(String unISBN){

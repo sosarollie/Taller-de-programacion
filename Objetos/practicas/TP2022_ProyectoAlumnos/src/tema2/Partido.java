@@ -77,10 +77,5 @@ public class Partido {
          return ganador;
                  
     }	    
-
-    @Override
-    public String toString() {
-        return local + " " + golesLocal + " VS " + visitante + " " + golesVisitante;
-    }
     
 }

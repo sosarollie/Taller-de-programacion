@@ -10,10 +10,18 @@ package tema3;
  * @author praise
  */
 public class Circulo {
-   private double radio;
-   private String CR;
-   private String CL;
+    private double radio;
+    private String colorRelleno;
+    private String colorLinea;
+    
+    
 
+    public Circulo (double radio, String colorRelleno, String colorLinea){
+        this.radio=radio;
+        this.colorRelleno=colorRelleno;
+        this.colorLinea=colorLinea;
+    }
+    
     public double getRadio() {
         return radio;
     }
@@ -22,33 +30,26 @@ public class Circulo {
         this.radio = radio;
     }
 
-    public String getCR() {
-        return CR;
+    public String getColorRelleno() {
+        return colorRelleno;
     }
 
-    public void setCR(String CR) {
-        this.CR = CR;
+    public void setColorRelleno(String colorRelleno) {
+        this.colorRelleno = colorRelleno;
     }
 
-    public String getCL() {
-        return CL;
+    public String getColorLinea() {
+        return colorLinea;
     }
 
-    public void setCL(String CL) {
-        this.CL = CL;
+    public void setColorLinea(String colorLinea) {
+        this.colorLinea = colorLinea;
     }
     
-    public Circulo (double radio, String colorRelleno, String colorLinea){
-        this.radio = radio;
-        this.CR = colorRelleno;
-        this.CL = colorLinea;
-    }
-    
-    public double calcularPerimetro(){
-        return 2 * Math.PI * this.radio;
-    }
-    
-    public double calcularArea(){
-        return Math.PI * this.radio * this.radio;
+    public double calcularPerimetro (){
+      return this.radio * 2 * Math.PI;
+}
+    public double calcularArea (){
+        return this.radio * this.radio * Math.PI;
     }
 }

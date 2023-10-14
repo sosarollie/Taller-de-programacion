@@ -1,66 +1,53 @@
 /*
- 3-A- Defina una clase para representar estantes. Un estante almacena a lo sumo 20 libros. Implemente un constructor que permita iniciar el estante sin libros. 
-Provea métodos para:  
-(i) devolver la cantidad de libros que almacenados 
-(ii) devolver si el estante está lleno     
-(iii) agregar un libro al estante 
-(iv) devolver el libro con un título particular que se recibe. 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package tema3;
-
 /**
  *
- * @author valen
+ * @author praise
  */
-
 public class Estante {
-    private Libro [] estante = new Libro[20]; 
-    private int dimL = 0; 
-    private int dimF = 0; 
-   
-    public Estante() {
+    private Libro [] estante = new Libro [20];
+    private int dimL = 0;
+    private int dimF = 20;
+
+    public Libro[] getEstante() {
+        return estante;
+    }
+
+    public int getDimL() {
+        return dimL;
+    }
+    
+    public void Estante(){
         
     }
     
-    public void setLibro(Libro unLibro) {
-        while (dimL < dimF && estante[dimL] != null)
-            dimL++; 
-        if (dimL < dimF)
-            estante[dimL] = unLibro; 
+    public boolean estaLleno(){
+        return this.dimL == this.dimF;
+    }
+    
+    public void agregarLibro(Libro unLibro){
+        if (this.estaLleno() == false) {
+            this.estante[this.dimL] = unLibro;
+            this.dimL++;
             
-    }
-
-    public String getLibro(String titulo) {
-        String aux = new String();
-        int i=0;
-        while (i < dimL && !estante[i].getTitulo().equals(titulo))
-            i++;
-        if (estante[i].getTitulo().equals(titulo))
-           aux = estante[i].toString();  
-        return aux; 
-    }
-
-    
-    // METODOS DE LA CLASE 
-        
-    public int cantLibros() {
-        return dimL; 
+        }
     }
     
-    public void setDimF(int dimension){
-      this.dimF = dimension; 
-        
+    public Libro devolverConTitulo(String unTitulo){
+        int pos = 0;
+        Libro libro = null;
+        boolean encontre = false;
+        while (pos <= dimL && encontre == false) {
+            if (estante[pos].getTitulo().equals(unTitulo)){
+                libro = estante[pos];
+                encontre = true;
+            }
+            pos++;
+        }
+        return libro;
     }
-    
-    public int getDimF(){
-        return this.dimF;
-    }
-    
-    public boolean estaLleno() {
-        boolean ok = false; 
-        if (dimL == dimF) 
-            ok = true; 
-        return ok; 
-    }
-    
 }

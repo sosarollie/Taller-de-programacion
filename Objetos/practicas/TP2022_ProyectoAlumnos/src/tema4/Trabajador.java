@@ -9,25 +9,25 @@ package tema4;
  *
  * @author praise
  */
-public class Trabajador extends Persona {
-    private String ocupacion;
+public class Trabajador extends Persona{
+    private String trabajo;
 
-    public String getOcupacion() {
-        return ocupacion;
-    }
-
-    public void setOcupacion(String ocupacion) {
-        this.ocupacion = ocupacion;
-    }
-
-    public Trabajador(String unNombre, int unDNI, int unaEdad,String ocupacion) {
+    public Trabajador(String trabajo, String unNombre, int unDNI, int unaEdad) {
         super(unNombre, unDNI, unaEdad);
-        this.ocupacion = ocupacion;
+        this.trabajo = trabajo;
+    }
+    
+    public String getTrabajo() {
+        return trabajo;
+    }
+
+    public void setTrabajo(String trabajo) {
+        this.trabajo = trabajo;
     }
 
     @Override
     public String toString() {
-        return super.toString() + " Soy: " + this.getOcupacion();
+        return super.toString() + " Soy " + this.getTrabajo();
     }
     
     

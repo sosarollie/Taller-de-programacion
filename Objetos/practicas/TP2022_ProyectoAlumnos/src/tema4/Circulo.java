@@ -5,14 +5,17 @@
  */
 package tema4;
 
-import tema3.*;
-
 /**
  *
  * @author praise
  */
 public class Circulo extends Figura{
-   private double radio;
+    private double radio;
+    
+    public Circulo (double radio,String unCl,String unCr){
+        super (unCl,unCr);
+        this.radio=radio;
+    }
 
     public double getRadio() {
         return radio;
@@ -21,24 +24,14 @@ public class Circulo extends Figura{
     public void setRadio(double radio) {
         this.radio = radio;
     }
-
-    public Circulo (double radio, String unCR, String unCL){
-        super(unCR,unCL);        
-        this.radio = radio;
+    public double calcularPerimetro (){
+        return radio * 2 * Math.PI;
     }
-    @Override
-    public double calcularPerimetro(){
-        return 2 * Math.PI * this.radio;
+    public double calcularArea (){
+      return radio * radio * Math.PI;
     }
-    @Override
-    public double calcularArea(){
-        return Math.PI * this.radio * this.radio;
-    }
-    @Override
-    public String toString(){
-        String aux;
-        return aux = super.toString() + "El radio del circulo es: " + this.radio;
-        
-        
+    public String toString (){
+        String aux = super.toString();
+        return aux + radio;
     }
 }
