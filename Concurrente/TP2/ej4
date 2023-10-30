@@ -1,0 +1,136 @@
+programa ej4
+procesos
+  proceso juntar (ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant:= cant + 1
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant:= cant + 1
+  fin
+areas
+  ciudad: AreaPC(25,25,75,75)
+  areaJefe: AreaP(1,1,1,1)
+  areaR1: AreaP(25,1,25,1)
+  areaR2: AreaP(30,1,30,1)
+  areaR3: AreaP(35,1,35,1)
+  areaR4: AreaP(40,1,40,1)
+robots
+  robot tipo1
+  variables
+    max: numero
+    go: boolean
+    f: numero
+    maxRobot: numero
+    numRobot: numero
+    aux: numero
+    ganador: boolean
+  comenzar
+    max:= -1
+    go:= V
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 10
+      Random(aux,1,4)
+      si (aux = 1)
+        EnviarMensaje(go,r1)
+      si (aux = 2)
+        EnviarMensaje(go,r2)
+      si (aux = 3) 
+        EnviarMensaje(go,r3)
+      sino 
+        EnviarMensaje(go,r4)
+      RecibirMensaje(go,*)
+    repetir 4
+      RecibirMensaje(numRobot,*)
+      si numRobot = 1
+        RecibirMensaje(f,r1)
+      si numRobot = 2
+        RecibirMensaje(f,r2)
+      si numRobot = 3
+        RecibirMensaje(f,r3)
+      sino
+        RecibirMensaje(f,r4)
+      si f>max
+        maxRobot:= numRobot            
+    go:= F
+    EnviarMensaje(go,r1)
+    EnviarMensaje(go,r2)
+    EnviarMensaje(go,r3)
+    EnviarMensaje(go,r4)
+    repetir 4
+      si maxRobot = 1
+        ganador:= V
+      sino
+        ganador:= F
+      EnviarMensaje(ganador,r1) 
+      si maxRobot = 2
+        ganador:= V
+      sino
+        ganador:= F
+      EnviarMensaje(ganador,r2)
+      si maxRobot = 3
+        ganador:= V
+      sino
+        ganador:= F
+      EnviarMensaje(ganador,r3)   
+      si maxRobot = 4
+        ganador:= V
+      sino
+        ganador:= F
+      EnviarMensaje(ganador,r4)      
+  fin
+  robot tipo2
+  variables
+    av: numero
+    ca: numero
+    avO: numero
+    caO: numero
+    cant: numero
+    go: boolean
+    quienSoy: numero
+    ganador: boolean
+  comenzar
+    avO:= PosAv
+    caO:= PosCa
+    RecibirMensaje(quienSoy,r5)
+    RecibirMensaje(go,r5)
+    mientras go = V
+      Random(av,25,75)
+      Random(ca,25,75)
+      Pos(av,ca)
+      juntar(cant)
+      Pos(avO,caO)
+      EnviarMensaje(go,r5)
+      RecibirMensaje(go,r5)
+    EnviarMensaje(quienSoy,r5)
+    EnviarMensaje(cant,r5)
+    RecibirMensaje(ganador,r5)
+    si ganador = V
+      Pos(50,50)      
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  r5: tipo2
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r1,areaR1)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r2,areaR2)
+  AsignarArea(r3,ciudad)
+  AsignarArea(r3,areaR3)
+  AsignarArea(r4,ciudad)
+  AsignarArea(r4,areaR4)
+  AsignarArea(r5,areaJefe)
+  Iniciar(r1,25,1)
+  Iniciar(r2,30,1)
+  Iniciar(r3,35,1)
+  Iniciar(r4,40,1)
+  Iniciar(r5,1,1) 
+fin

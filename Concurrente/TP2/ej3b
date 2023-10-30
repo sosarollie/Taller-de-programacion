@@ -1,0 +1,138 @@
+programa ej3
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:= p + 1
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot tipoA1
+  variables
+    go: boolean
+    f: numero
+  comenzar
+    go:= V 
+    f:= 0
+    derecha
+    juntarF(f)
+    repetir 9
+      mover
+      juntarF(f)
+    EnviarMensaje(f,rA2)
+    EnviarMensaje(go,rA2)
+    go:= F
+    RecibirMensaje(f,rA2)
+    RecibirMensaje(go,rA2)    
+    si go = V 
+      Pos(PosAv + 11, 1)
+      repetir 9
+        mover
+        juntarF(f)
+      EnviarMensaje(f,rA2)
+      EnviarMensaje(go,rA2)
+  fin
+  
+  robot tipoA2
+  variables
+    go: boolean
+    f: numero
+  comenzar
+    go:= F
+    RecibirMensaje(f,rA1)
+    RecibirMensaje(go,rA1)
+    si go = V
+      derecha
+      juntarF(f)
+      repetir 9 
+        mover
+        juntarF(f)
+    EnviarMensaje(f,rA1)
+    EnviarMensaje(go,rA1)
+    go:= F
+    RecibirMensaje(f,rA1)
+    RecibirMensaje(go,rA1)
+    si go = V
+      Pos(PosAv + 11,1)
+      repetir 9
+        mover
+        juntarF(f)
+      Informar(f)
+  fin
+  robot tipoB1
+  variables
+    go: boolean
+    p: numero
+  comenzar
+    go:= V 
+    p:= 0
+    derecha
+    juntarP(p)
+    repetir 9
+      mover
+      juntarP(p)
+    EnviarMensaje(p,rB2)
+    EnviarMensaje(go,rB2)
+    go:= F
+    RecibirMensaje(p,rB2)
+    RecibirMensaje(go,rB2)    
+    si go = V 
+      Pos(PosAv + 11, 5)
+      repetir 9
+        mover
+        juntarP(p)
+      EnviarMensaje(p,rB2)
+      EnviarMensaje(go,rB2)
+
+  fin
+  
+  robot tipoB2
+  variables
+    go: boolean
+    p: numero
+  comenzar
+    go:= F
+    RecibirMensaje(p,rB1)
+    RecibirMensaje(go,rB1)
+    si go = V
+      derecha
+      juntarP(p)
+      repetir 9
+        mover
+        juntarP(p)
+    EnviarMensaje(p,rB1)
+    EnviarMensaje(go,rB1)
+    RecibirMensaje(p,rB1)
+    RecibirMensaje(go,rB1)
+    si go = V
+      Pos(PosAv + 11,5)
+      repetir 9
+        mover
+        juntarP(p)
+      Informar(p)
+  fin
+
+variables
+  rA1: tipoA1
+  rA2: tipoA2
+  rB1: tipoB1
+  rB2: tipoB2
+comenzar
+  AsignarArea(rA1,ciudad)
+  AsignarArea(rA2,ciudad)
+  AsignarArea(rB1,ciudad)
+  AsignarArea(rB2,ciudad)
+  Iniciar(rA1,1,1)
+  Iniciar(rA2,11,1)
+  Iniciar(rB1,1,5)
+  Iniciar(rB2,11,5)
+fin

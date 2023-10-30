@@ -1,0 +1,120 @@
+programa ej1
+procesos
+  proceso juntarF
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+  fin
+  proceso depositarF
+  comenzar
+    mientras HayFlorEnLaBolsa
+      mover
+      depositarFlor
+  fin
+areas
+  areaServidor: AreaP(100,100,100,100)
+  areaRobots: AreaPC(1,1,3,100)
+robots
+  robot cliente
+  variables
+    quienSoy: numero
+    cantF: numero
+    deposito: boolean
+    termine: boolean 
+    av: numero
+    ca: numero
+  comenzar
+    RecibirMensaje(quienSoy,r4)
+    mientras termine = F
+      av:= PosAv
+      ca:= PosCa
+      Random(cantF,1,4)
+      EnviarMensaje(quienSoy,r4)
+      EnviarMensaje(cantF,r4)
+      EnviarMensaje(av,r4)
+      EnviarMensaje(ca,r4)
+      RecibirMensaje(deposito,r4)
+      mover
+      juntarF
+      repetir cantF
+        si PosCa<100 && HayFlorEnLaBolsa
+          depositarF
+      si PosCa = 100
+        termine:= V    
+        EnviarMensaje(termine,r4)
+      EnviarMensaje(termine,r4)
+  fin
+  robot servidor
+  variables
+    finalizar: boolean
+    terminaron: numero
+    ID: numero
+    cantF: numero
+    termine: boolean
+    deposite: boolean
+    av: numero
+    ca: numero
+    numRobot: numero
+  comenzar
+    repetir 150
+      juntarF
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    finalizar:= F
+    mientras finalizar = F
+      RecibirMensaje(numRobot,*)
+      si numRobot = 1      
+        RecibirMensaje(cantF,r1)
+        RecibirMensaje(av,r1)
+        RecibirMensaje(ca,r1)
+        Pos(av,ca + 1)
+        repetir cantF
+          si HayFlorEnLaBolsa
+            depositarFlor
+        Pos(100,100)
+        EnviarMensaje(deposite,r1)
+        RecibirMensaje(termine,r1)
+      si numRobot = 2     
+        RecibirMensaje(cantF,r2)
+        RecibirMensaje(av,r2)
+        RecibirMensaje(ca,r2)
+        Pos(av,ca + 1)
+        repetir cantF
+          si HayFlorEnLaBolsa
+            depositarFlor
+        Pos(100,100)
+        EnviarMensaje(deposite,r2)
+        RecibirMensaje(termine,r2)
+      si numRobot = 3     
+        RecibirMensaje(cantF,r3)
+        RecibirMensaje(av,r3)
+        RecibirMensaje(ca,r3)
+        Pos(av,ca + 1)
+        repetir cantF
+          si HayFlorEnLaBolsa
+            depositarFlor
+        Pos(100,100)
+        EnviarMensaje(deposite,r3)
+        RecibirMensaje(termine,r3)
+      si termine = V
+        terminaron:= terminaron + 1
+      si terminaron = 3
+        finalizar:= V 
+  fin       
+variables
+  r1: cliente
+  r2: cliente
+  r3: cliente
+  r4: servidor
+comenzar
+  AsignarArea(r1,areaRobots)
+  AsignarArea(r2,areaRobots)
+  AsignarArea(r3,areaRobots)
+  AsignarArea(r4,areaServidor)
+  AsignarArea(r4,areaRobots)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(r4,100,100)
+fin

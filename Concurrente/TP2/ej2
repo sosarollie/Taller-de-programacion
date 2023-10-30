@@ -1,0 +1,80 @@
+programa ej2
+procesos
+  proceso juntar (ES p: numero; ES f: numero)
+  comenzar
+    si HayPapelEnLaEsquina    
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        p:= p + 1
+    si HayFlorEnLaEsquina
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        f:= f + 1
+  fin
+  
+  proceso esMayor (E p: numero; E f: numero; ES cantE: numero)
+  comenzar
+    si f>p
+      cantE:= cantE + 1
+  fin
+  
+  proceso recorrer (ES cantE: numero)
+  variables
+    f: numero
+    p: numero
+    alto: numero
+  comenzar
+    alto:= 0
+    cantE:= 0
+    repetir 4
+      f:= 0
+      p:= 0
+      juntar(p,f)
+      Random(alto,1,5)
+      repetir alto
+        mover
+        juntar(p,f)
+      esMayor(p,f,cantE)
+      derecha
+      mover
+      juntar(p,f)
+      repetir 3
+        derecha
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot tipo1
+  variables
+    cantE: numero
+  comenzar
+    recorrer(cantE)
+    EnviarMensaje(cantE,r4)
+  fin
+  
+  robot tipo2
+  variables
+    cant: numero
+    total: numero
+  comenzar
+    total:= 0
+    repetir 3
+      RecibirMensaje(cant,*)
+      total:= total + cant
+    Informar(total)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo2
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  AsignarArea(r4,ciudad)
+  Iniciar(r1,2,1)
+  Iniciar(r2,7,1)
+  Iniciar(r3,12,1)
+  Iniciar(r4,1,1)
+fin

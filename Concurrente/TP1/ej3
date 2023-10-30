@@ -1,0 +1,100 @@
+programa tp1ej2
+procesos
+  proceso contar(ES cantPapeles: numero; ES cantFlores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantFlores:= cantFlores + 1
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cantPapeles:= cantPapeles + 1
+    mientras HayPapelEnLaBolsa
+      depositarPapel
+    mientras HayFlorEnLaBolsa
+      depositarFlor
+  fin
+  
+  proceso arriba
+  comenzar
+    repetir 3
+      derecha
+  fin
+  
+  proceso esMayor (ES cantEscalones: numero; ES cantPapeles: numero; ES cantFlores: numero;)
+  comenzar
+    si (cantPapeles > cantFlores)
+      cantEscalones:= cantEscalones + 1
+  fin
+  
+  proceso recorrer(ES cantEscalones: numero)
+  variables
+    cantFlores: numero
+    cantPapeles: numero
+  comenzar
+    cantFlores:= 0
+    cantPapeles:= 0
+    cantEscalones:= 0
+    contar(cantPapeles,cantFlores)
+    mover
+    contar(cantPapeles,cantFlores)
+    derecha
+    mover
+    contar(cantPapeles,cantFlores)
+    esMayor(cantEscalones,cantPapeles,cantFlores)
+    cantFlores:= 0
+    cantPapeles:= 0
+    arriba
+    repetir 2
+      contar(cantPapeles,cantFlores)
+      mover
+    derecha
+    repetir 2
+      contar(cantPapeles,cantFlores)
+      mover
+    cantFlores:= 0
+    cantPapeles:= 0
+    esMayor(cantEscalones,cantPapeles,cantFlores)
+    arriba
+    repetir 3
+      contar(cantPapeles,cantFlores)
+      mover
+    derecha
+    repetir 3
+      contar(cantPapeles,cantFlores)
+      mover
+    cantFlores:= 0
+    cantPapeles:= 0
+    esMayor(cantEscalones,cantPapeles,cantFlores)
+    arriba
+    repetir 4
+      contar(cantPapeles,cantFlores)
+      mover
+    derecha
+    repetir 4
+      contar(cantPapeles,cantFlores)
+      mover
+    esMayor(cantEscalones,cantPapeles,cantFlores)
+    Informar(cantEscalones)      
+  fin
+areas
+  ciudad1: AreaC(1,1,100,100)
+robots
+  robot tipo1
+  variables
+    cantEscalones: numero
+  comenzar
+    recorrer(cantEscalones)
+    Informar(cantEscalones)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+comenzar
+  AsignarArea(r1,ciudad1)
+  AsignarArea(r2,ciudad1)
+  AsignarArea(r3,ciudad1)
+  Iniciar(r1,12,14)
+  Iniciar(r2,17,10)
+  Iniciar(r3,22,6)
+fin

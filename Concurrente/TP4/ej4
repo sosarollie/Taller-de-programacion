@@ -1,0 +1,114 @@
+programa ej4
+procesos
+  proceso recogerFlores(E av:numero; E ca:numero; E avAnt:numero; E caAnt: numero; E cant: numero)
+  comenzar
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    si cant <> 0
+      LiberarEsquina(avAnt,caAnt)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+  fin
+  proceso recogerPapeles(E av:numero; E ca:numero; E avAnt:numero; E caAnt: numero; E cant: numero)
+  comenzar
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    si cant <> 0
+      LiberarEsquina(avAnt,caAnt)
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+  fin
+  proceso vaciarBolsa(E av: numero; E ca: numero; E avAnt: numero; E caAnt: numero; E cant: numero)
+  comenzar 
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    si cant <> 0
+      LiberarEsquina(avAnt,caAnt)
+    mientras HayPapelEnLaBolsa
+      depositarPapel
+    mientras HayFlorEnLaBolsa
+      depositarFlor
+  fin
+areas
+  areaSlaves: AreaPC(2,1,100,100)
+  areaMaster: AreaP(1,1,1,1)
+robots
+  robot slave
+  variables
+    tarea: numero
+    quienSoy: numero
+    av: numero
+    ca: numero
+    avAnt: numero
+    caAnt: numero
+    cant: numero
+    finalizar: boolean
+    termine: boolean
+  comenzar
+    RecibirMensaje(quienSoy,m)
+    finalizar:= F
+    cant:= 0
+    mientras finalizar = F
+      RecibirMensaje(tarea,m)
+      EnviarMensaje(quienSoy,m)
+      si tarea <> 4
+        RecibirMensaje(av,m)
+        RecibirMensaje(ca,m)
+      si tarea = 1
+        recogerFlores(av,ca,avAnt,caAnt,cant)
+      si tarea = 2
+        recogerPapeles(av,ca,avAnt,caAnt,cant)
+      si tarea = 3
+        vaciarBolsa(av,ca,avAnt,caAnt,cant)
+      si tarea = 4
+        finalizar:= V
+      EnviarMensaje(termine,m)
+      avAnt:= av
+      caAnt:= ca
+      cant:= 1
+  fin
+  robot master
+  variables
+    quienEs: numero
+    ack: boolean
+    tarea: numero
+    av: numero
+    ca: numero
+    enviar: numero
+    end: numero
+  comenzar
+    EnviarMensaje(1,s1)
+    EnviarMensaje(2,s2)
+    repetir 10
+      Random(tarea,1,3)
+      Random(av,2,100)
+      Random(ca,2,100)
+      Random(enviar,1,2)
+      si enviar = 1
+        EnviarMensaje(tarea,s1)
+      si enviar = 2
+        EnviarMensaje(tarea,s2)
+      RecibirMensaje(quienEs,*)
+      si quienEs = 1
+        EnviarMensaje(av,s1)
+        EnviarMensaje(ca,s1)
+      si quienEs = 2
+        EnviarMensaje(av,s2)
+        EnviarMensaje(ca,s2)
+      RecibirMensaje(ack,*)
+    tarea:= 4
+    EnviarMensaje(tarea,s1)
+    EnviarMensaje(tarea,s2)
+  fin
+variables
+  s1: slave
+  s2: slave
+  m: master
+comenzar
+  AsignarArea(s1,areaSlaves)
+  AsignarArea(s2,areaSlaves)
+  AsignarArea(m,areaMaster)
+  Iniciar(s1,2,1)
+  Iniciar(s2,3,1)
+  Iniciar(m,1,1)
+fin

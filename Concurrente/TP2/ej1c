@@ -1,0 +1,58 @@
+programa ej1a
+procesos
+  proceso juntar (ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores + 1
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot tipo1
+  variables
+    floresPropias: numero
+  comenzar
+    juntar(floresPropias)
+    repetir 9
+      mover
+      juntar(floresPropias)
+    EnviarMensaje(floresPropias,r7)
+  fin
+
+  robot tipo2
+  variables
+    flores: numero
+    max: numero
+  comenzar
+    max:= -1
+    repetir 6
+      RecibirMensaje(flores,*)
+      si flores>max
+        max:= flores
+    Informar(max)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  r5: tipo1
+  r6: tipo1
+  r7: tipo2
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  AsignarArea(r4,ciudad)
+  AsignarArea(r5,ciudad)
+  AsignarArea(r6,ciudad)
+  AsignarArea(r7,ciudad)
+  Iniciar(r1,1,1)
+  Iniciar(r2,11,10)
+  Iniciar(r3,21,30)
+  Iniciar(r4,31,40)
+  Iniciar(r5,41,50)
+  Iniciar(r6,51,60) 
+  Iniciar(r7,2,1)
+fin

@@ -1,0 +1,97 @@
+programa ej1
+procesos
+  proceso juntarF(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant:= cant + 1
+  fin
+   
+  proceso juntarP (ES cant: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant:= cant + 1
+  fin
+   
+areas
+  areaF: AreaPC(1,1,5,10)
+  areaF1: AreaP(6,10,6,10)
+  areaF2: AreaP(7,10,7,10)
+  areaP: AreaPC(6,1,10,9)
+  areaP1: AreaP(8,10,8,10)
+  areaP2: AreaP(9,10,9,10)
+  areaC: AreaC(10,10,10,10)
+robots
+  robot tipoF
+  variables
+    ca: numero
+    av: numero
+    avO: numero
+    cant: numero
+  comenzar
+    avO:= PosAv
+    repetir 5
+      Random(av,1,5)
+      Random(ca,1,10)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarF(cant)
+      repetir cant
+        si HayFlorEnLaBolsa
+          BloquearEsquina(10,10)
+          Pos(10,10)
+          LiberarEsquina(av,ca)
+          depositarFlor
+          Pos(avO,10)
+          LiberarEsquina(10,10)
+      Pos(avO,10)
+  fin
+  
+  robot tipoP
+  variables
+    ca: numero
+    av: numero
+    avO: numero
+    cant: numero
+  comenzar
+    avO:= PosAv
+    repetir 3
+      Random(av,6,10)
+      Random(ca,1,9)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarP(cant)
+      repetir cant
+        si HayPapelEnLaBolsa
+          BloquearEsquina(10,10)
+          Pos(10,10)
+          LiberarEsquina(av,ca)
+          depositarPapel
+          Pos(avO,10)
+          LiberarEsquina(10,10)
+      Pos(avO,10)
+  fin
+variables
+  r1: tipoF
+  r2: tipoF
+  r3: tipoP
+  r4: tipoP
+comenzar
+  AsignarArea(r1,areaF)
+  AsignarArea(r1,areaF1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,areaF)
+  AsignarArea(r2,areaF2)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,areaP)
+  AsignarArea(r3,areaP1)
+  AsignarArea(r3,areaC)
+  AsignarArea(r4,areaP)
+  AsignarArea(r4,areaP2)
+  AsignarArea(r4,areaC)
+  Iniciar(r1,6,10)
+  Iniciar(r2,7,10)
+  Iniciar(r3,8,10)
+  Iniciar(r4,9,10)
+fin

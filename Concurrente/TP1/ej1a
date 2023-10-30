@@ -1,0 +1,46 @@
+programa Tp1ej1 
+procesos
+  proceso juntar (ES flor: numero; ES cantEsq: numero)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      mientras (HayFlorEnLaEsquina) 
+        tomarFlor
+        flor:= flor + 1
+    sino
+      cantEsq:= cantEsq + 1
+  fin
+  proceso recorrerAvenida(ES flor: numero; ES cantEsq: numero)
+  comenzar
+    flor:= 0
+    cantEsq:= 0
+    repetir 99
+      juntar(flor, cantEsq)
+      mover 
+    juntar (flor, cantEsq) 
+  fin  
+areas
+  ciudad: AreaC(1,1,100,100)  
+robots
+  robot tipo1
+  variables
+    cantFlor: numero
+    cantEsq: numero
+  comenzar
+    recorrerAvenida(cantFlor, cantEsq)
+    Informar (cantFlor)
+    Informar (cantEsq) 
+    Pos(3,1)
+    recorrerAvenida(cantFlor, cantEsq)
+    Informar (cantFlor)
+    Informar (cantEsq) 
+    Pos(5,1)
+    recorrerAvenida(cantFlor, cantEsq)
+    Informar (cantFlor)
+    Informar(cantEsq)
+  fin  
+variables
+  robot1: tipo1
+comenzar
+  AsignarArea(robot1,ciudad)
+  Iniciar(robot1, 1, 1)
+fin

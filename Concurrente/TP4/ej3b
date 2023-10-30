@@ -1,0 +1,76 @@
+programa ej3a
+procesos
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:= p + 1
+  fin
+  proceso recorrido (ES p: numero; ES cant: numero)
+  variables
+    cant: numero
+  comenzar
+    Random(cant,1,5)
+    juntarP(p)
+    mientras p<>cant
+      si PosCa<100
+        mover
+        juntarP(p)
+      si PosCa = 100
+        cant:= cant + 1
+  fin
+areas
+  areaRobots: AreaPC(1,1,3,100)
+  areaJefe: AreaP(5,1,5,1)
+robots
+  robot tipo1
+  variables
+    quienSoy: numero
+    quienEs: numero
+    seguir: boolean
+    llegue: boolean
+    p: numero
+    cantLlegados: numero
+  comenzar
+    cantLlegados:= 0
+    RecibirMensaje(quienSoy,r4)
+    mientras PosCa <100
+      recorrido(p,cantLlegados)
+      si quienSoy = 1
+        EnviarMensaje(quienSoy,r2)
+        EnviarMensaje(quienSoy,r3)
+      si quienSoy = 2
+        EnviarMensaje(quienSoy,r1)
+        EnviarMensaje(quienSoy,r3)
+      si quienSoy = 3
+        EnviarMensaje(quienSoy,r1)
+        EnviarMensaje(quienSoy,r2)
+      si cantLlegados = 0
+        repetir 2
+          RecibirMensaje(quienEs,*)
+      si cantLlegados = 1
+        RecibirMensaje(quienEs, *)
+  fin
+  robot tipo2
+  variables
+    numRobot: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo2
+comenzar
+  AsignarArea(r1,areaRobots)
+  AsignarArea(r2,areaRobots)
+  AsignarArea(r3,areaRobots)
+  AsignarArea(r4,areaJefe)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(r4,5,1)
+fin

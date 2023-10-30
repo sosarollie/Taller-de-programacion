@@ -1,0 +1,41 @@
+{Ejercicio 3: Implemente el siguiente juego. Existen áreas privadas para cada uno de tres robots delimitadas por las
+esquinas (2,2) (7,7); (8,2) (13,7); (14,2) (19,7) respectivamente y un robot fiscalizador.
+Cada robot jugador debe tratar de juntar la mayor cantidad de flores posible, para esto tiene tres intentos. En cada
+intento se posiciona en una esquina determinada al azar (dentro de su área) y junta todas las flores de esa esquina y
+vuelve a su esquina original. El robot fiscalizador determinará cuántas flores juntaron entre los 3 robots. Los robots
+se posicionan inicialmente en (2,2), (8,2) y (14,2) y el robot fiscalizador en la esquina (1,1)}
+programa teoriaej3
+areas
+  area1: AreaP(2,2,7,7)
+  area2: AreaP(8,2,13,7)
+  area3: AreaP(14,2,19,7)
+robots
+
+  robot tipo1
+  variables
+    inf: numero
+    sup: numero
+    flores: numero
+    quienSoy: numero
+  comenzar
+    RecibirMensaje(quienSoy,robot4)
+    RecibirMensaje(inf,robot4)
+    RecibirMensaje(sup,robot4)
+    repetir 3
+      Random(flores,inf,sup)
+      if quienSoy = 1
+        Pos(2,2)
+      if quienSoy = 2
+        Pos(8,2)
+      if quienSoy = 3
+        Pos(14,2)
+  fin
+  
+  robot tipo2
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(
+  fin
+variables
+comenzar
+fin

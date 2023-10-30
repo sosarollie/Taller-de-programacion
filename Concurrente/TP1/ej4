@@ -1,0 +1,71 @@
+programa TP1EJ4
+procesos
+  proceso recorrerAvenidaFlor
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+    repetir 99
+      mover
+      si HayFlorEnLaEsquina
+        tomarFlor
+  fin
+  
+  proceso recorrerAvenidaPapel
+  comenzar
+    si HayPapelEnLaEsquina
+      tomarPapel
+    repetir 99
+      mover
+      si HayPapelEnLaEsquina
+        tomarPapel
+  fin
+  
+  proceso recorrerAreaImpar
+  comenzar
+    recorrerAvenidaFlor
+    Pos(PosAv + 1,1)
+    repetir 23
+      recorrerAvenidaFlor
+      Pos(PosAv + 1,1)   
+    recorrerAvenidaFlor
+  fin
+    
+  proceso recorrerAreaPar
+  comenzar
+    recorrerAvenidaPapel
+    Pos(PosAv + 1,1)
+    repetir 23
+      recorrerAvenidaPapel
+      Pos(PosAv + 1,1)
+    recorrerAvenidaPapel
+  fin
+areas
+  area1: AreaP(1,1,25,100)
+  area2: AreaP(26,1,50,100)
+  area3: AreaP(51,1,75,100)
+  area4: AreaP(76,1,100,100)
+robots
+  robot tipoImpar
+  comenzar
+    recorrerAreaImpar
+    Pos(51,1)
+    recorrerAreaImpar
+  fin
+  
+  robot tipoPar
+  comenzar
+    recorrerAreaPar
+    Pos(76,1)
+    recorrerAreaPar
+  fin
+variables
+  r1: tipoImpar
+  r2: tipoPar
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r1,area3)
+  AsignarArea(r2,area4)
+  Iniciar(r1,1,1)
+  Iniciar(r2,26,1)
+fin
