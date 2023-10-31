@@ -1,100 +1,73 @@
-programa tp1ej2
+programa TP1EJ3
 procesos
-  proceso contar(ES cantPapeles: numero; ES cantFlores: numero)
+  proceso juntarF (ES flores: numero)
   comenzar
-    mientras HayFlorEnLaEsquina
-      tomarFlor
-      cantFlores:= cantFlores + 1
-    mientras HayPapelEnLaEsquina
-      tomarPapel
-      cantPapeles:= cantPapeles + 1
-    mientras HayPapelEnLaBolsa
-      depositarPapel
-    mientras HayFlorEnLaBolsa
-      depositarFlor
+    si (HayFlorEnLaEsquina)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:= flores + 1
   fin
-  
-  proceso arriba
+  proceso juntarP (ES papeles: numero)
   comenzar
-    repetir 3
-      derecha
+    si (HayPapelEnLaEsquina)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papeles:= papeles + 1
   fin
-  
-  proceso esMayor (ES cantEscalones: numero; ES cantPapeles: numero; ES cantFlores: numero;)
+  proceso depositarF
   comenzar
-    si (cantPapeles > cantFlores)
-      cantEscalones:= cantEscalones + 1
+    si (HayFlorEnLaBolsa)
+      mientras(HayFlorEnLaBolsa)
+        depositarFlor
   fin
-  
-  proceso recorrer(ES cantEscalones: numero)
-  variables
-    cantFlores: numero
-    cantPapeles: numero
+  proceso depositarP
   comenzar
-    cantFlores:= 0
-    cantPapeles:= 0
-    cantEscalones:= 0
-    contar(cantPapeles,cantFlores)
-    mover
-    contar(cantPapeles,cantFlores)
-    derecha
-    mover
-    contar(cantPapeles,cantFlores)
-    esMayor(cantEscalones,cantPapeles,cantFlores)
-    cantFlores:= 0
-    cantPapeles:= 0
-    arriba
-    repetir 2
-      contar(cantPapeles,cantFlores)
-      mover
-    derecha
-    repetir 2
-      contar(cantPapeles,cantFlores)
-      mover
-    cantFlores:= 0
-    cantPapeles:= 0
-    esMayor(cantEscalones,cantPapeles,cantFlores)
-    arriba
-    repetir 3
-      contar(cantPapeles,cantFlores)
-      mover
-    derecha
-    repetir 3
-      contar(cantPapeles,cantFlores)
-      mover
-    cantFlores:= 0
-    cantPapeles:= 0
-    esMayor(cantEscalones,cantPapeles,cantFlores)
-    arriba
-    repetir 4
-      contar(cantPapeles,cantFlores)
-      mover
-    derecha
-    repetir 4
-      contar(cantPapeles,cantFlores)
-      mover
-    esMayor(cantEscalones,cantPapeles,cantFlores)
-    Informar(cantEscalones)      
+    si(HayPapelEnLaBolsa)
+      mientras(HayPapelEnLaBolsa)
+        depositarPapel
   fin
+  proceso medioEscalon (E largoEscalon : numero; ES papeles: numero; ES flores: numero)
+  comenzar
+    repetir largoEscalon
+      juntarF(flores)
+      juntarP(papeles)
+      depositarF
+      depositarP
+      mover
+  fin 
 areas
-  ciudad1: AreaC(1,1,100,100)
+  area1: AreaP(12,14,22,24)
+  area2: AreaP(17,10,27,20)
+  area3: AreaP(22,6,32,16)
 robots
   robot tipo1
   variables
-    cantEscalones: numero
+    largoEscalon, papeles, flores, cantEscalones : numero
   comenzar
-    recorrer(cantEscalones)
+    cantEscalones:= 0
+    largoEscalon:= 1
+    repetir 4
+      papeles:= 0
+      flores:= 0
+      medioEscalon(largoEscalon, papeles, flores)
+      derecha
+      medioEscalon(largoEscalon, papeles, flores)
+      si (papeles > flores)
+        cantEscalones:= cantEscalones + 1
+      repetir 3
+        derecha
+      largoEscalon:= largoEscalon + 1
     Informar(cantEscalones)
   fin
 variables
-  r1: tipo1
-  r2: tipo1
-  r3: tipo1
+  robot1: tipo1
+  robot2: tipo1
+  robot3: tipo1
 comenzar
-  AsignarArea(r1,ciudad1)
-  AsignarArea(r2,ciudad1)
-  AsignarArea(r3,ciudad1)
-  Iniciar(r1,12,14)
-  Iniciar(r2,17,10)
-  Iniciar(r3,22,6)
+  AsignarArea(robot1, area1)
+  AsignarArea(robot2, area2)
+  AsignarArea(robot3, area3)
+  Iniciar(robot1,12,14)
+  Iniciar(robot2,17,10)
+  Iniciar(robot3,22,6)
 fin
