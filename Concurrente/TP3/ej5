@@ -1,0 +1,89 @@
+programa TP3EJ5
+procesos
+  proceso juntarP(ES vacio: boolean)
+  comenzar
+    si (HayPapelEnLaEsquina)
+      tomarPapel
+    sino
+      vacio:= V
+  fin
+areas
+  area1: AreaP(4,1,4,100)
+  area2: AreaP(6,1,6,100)
+  area3: AreaP(8,1,8,100)
+  area4: AreaP(10,1,10,100)
+  fuente: AreaPC(11,11,11,11)
+  areaCoor: AreaP(1,1,1,1)
+robots
+  robot tipoCoor
+  variables
+    numRobot: numero
+    caActual: numero
+    numGanador: numero
+    caMax: numero
+  comenzar
+    caMax:= -1
+    numGanador:= -1
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+    repetir 4
+      RecibirMensaje(numRobot, *)
+      si numRobot = 1
+        RecibirMensaje(caActual, r1)
+      si numRobot = 2
+        RecibirMensaje(caActual, r2)
+      si numRobot = 3
+        RecibirMensaje(caActual, r3)
+      si numRobot = 4
+        RecibirMensaje(caActual, r4)
+      si caActual > caMax
+        caMax:= caActual
+        numGanador:= numRobot
+    Informar(numGanador)
+  fin
+  robot tipoR
+  variables
+    quienSoy: numero
+    caActual: numero
+    avInicial: numero
+    vacio: boolean
+  comenzar
+    RecibirMensaje(quienSoy, rCoor)
+    vacio:= F
+    avInicial:= PosAv
+    mientras (vacio = F) y (PosCa < 100)
+      caActual:= PosCa
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      juntarP(vacio)
+      Pos(avInicial, caActual)
+      LiberarEsquina(11,11)
+      si (vacio = F)
+        mover
+    EnviarMensaje(quienSoy, rCoor)
+    EnviarMensaje(caActual, rCoor)
+  fin
+variables
+  r1: tipoR
+  r2: tipoR
+  r3: tipoR
+  r4: tipoR
+  rCoor: tipoCoor
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(r4, area4)
+  AsignarArea(rCoor, areaCoor)
+  AsignarArea(r1, fuente)
+  AsignarArea(r2, fuente)
+  AsignarArea(r3, fuente)
+  AsignarArea(r4, fuente)
+  Iniciar(r1, 4,1)
+  Iniciar(r2, 6,1)
+  Iniciar(r3, 8,1)
+  Iniciar(r4, 10,1)
+  Iniciar(rCoor, 1,1)
+fin

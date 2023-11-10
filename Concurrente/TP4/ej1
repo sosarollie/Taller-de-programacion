@@ -1,120 +1,108 @@
-programa ej1
+programa TP4EJ1
 procesos
   proceso juntarF
   comenzar
-    si HayFlorEnLaEsquina
+    mientras (HayFlorEnLaEsquina)
       tomarFlor
   fin
   proceso depositarF
   comenzar
-    mientras HayFlorEnLaBolsa
-      mover
+    mientras(HayFlorEnLaBolsa)
       depositarFlor
-  fin
+      si PosCa < 100
+        mover
+  fin 
 areas
+  area1: AreaPC(1,1,1,100)
+  area2: AreaPC(2,1,2,100)
+  area3: AreaPC(3,1,3,100)
   areaServidor: AreaP(100,100,100,100)
-  areaRobots: AreaPC(1,1,3,100)
 robots
-  robot cliente
+  robot tipoCliente
   variables
-    quienSoy: numero
-    cantF: numero
-    deposito: boolean
-    termine: boolean 
-    av: numero
-    ca: numero
-  comenzar
-    RecibirMensaje(quienSoy,r4)
-    mientras termine = F
-      av:= PosAv
-      ca:= PosCa
-      Random(cantF,1,4)
-      EnviarMensaje(quienSoy,r4)
-      EnviarMensaje(cantF,r4)
-      EnviarMensaje(av,r4)
-      EnviarMensaje(ca,r4)
-      RecibirMensaje(deposito,r4)
-      mover
-      juntarF
-      repetir cantF
-        si PosCa<100 && HayFlorEnLaBolsa
-          depositarF
-      si PosCa = 100
-        termine:= V    
-        EnviarMensaje(termine,r4)
-      EnviarMensaje(termine,r4)
-  fin
-  robot servidor
-  variables
-    finalizar: boolean
-    terminaron: numero
     ID: numero
-    cantF: numero
+    cantFlores: numero
+    avActual: numero
+    calleSig: numero
     termine: boolean
-    deposite: boolean
-    av: numero
-    ca: numero
-    numRobot: numero
   comenzar
-    repetir 150
+    avActual:= PosAv
+    RecibirMensaje(ID, rS)
+    mientras (PosAv < 100)
+      calleSig:= PosCa + 1
+      Random(cantFlores,1,4)
+      EnviarMensaje(ID, rS)
+      EnviarMensaje(cantFlores, rS)
+      EnviarMensaje(avActual, rS)
+      EnviarMensaje(calleSig, rS)
+      RecibirMensaje(termine, rS)
+      BloquearEsquina(avActual, calleSig)
+      Pos(avActual, calleSig)
       juntarF
-    EnviarMensaje(1,r1)
-    EnviarMensaje(2,r2)
-    EnviarMensaje(3,r3)
-    finalizar:= F
-    mientras finalizar = F
-      RecibirMensaje(numRobot,*)
-      si numRobot = 1      
-        RecibirMensaje(cantF,r1)
-        RecibirMensaje(av,r1)
-        RecibirMensaje(ca,r1)
-        Pos(av,ca + 1)
-        repetir cantF
-          si HayFlorEnLaBolsa
-            depositarFlor
+      Pos(avActual, calleSig - 1)
+      LiberarEsquina(avActual, calleSig)
+      depositarF
+    EnviarMensaje(0, rS)
+  fin
+  robot tipoServidor
+  variables
+    ID: numero
+    cantFlores: numero
+    av: numero
+    calle: numero
+    termine: boolean
+    robotsTerminados: numero
+  comenzar
+    juntarF
+    robotsTerminados:= 0
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    mientras (robotsTerminados < 3)
+      RecibirMensaje(ID, *)
+      si ID = 1
+        RecibirMensaje(cantFlores, r1)
+        RecibirMensaje(av, r1)
+        RecibirMensaje(calle, r1)
+      si ID = 2
+        RecibirMensaje(cantFlores, r2)
+        RecibirMensaje(av, r2)
+        RecibirMensaje(calle, r2)      
+      si ID = 3
+        RecibirMensaje(cantFlores, r3)
+        RecibirMensaje(av, r3)
+        RecibirMensaje(calle, r3)
+      si (cantFlores <> 0)
+        BloquearEsquina(av, calle)
+        Pos(av, calle)
+        repetir cantFlores
+          depositarFlor
         Pos(100,100)
-        EnviarMensaje(deposite,r1)
-        RecibirMensaje(termine,r1)
-      si numRobot = 2     
-        RecibirMensaje(cantF,r2)
-        RecibirMensaje(av,r2)
-        RecibirMensaje(ca,r2)
-        Pos(av,ca + 1)
-        repetir cantF
-          si HayFlorEnLaBolsa
-            depositarFlor
-        Pos(100,100)
-        EnviarMensaje(deposite,r2)
-        RecibirMensaje(termine,r2)
-      si numRobot = 3     
-        RecibirMensaje(cantF,r3)
-        RecibirMensaje(av,r3)
-        RecibirMensaje(ca,r3)
-        Pos(av,ca + 1)
-        repetir cantF
-          si HayFlorEnLaBolsa
-            depositarFlor
-        Pos(100,100)
-        EnviarMensaje(deposite,r3)
-        RecibirMensaje(termine,r3)
-      si termine = V
-        terminaron:= terminaron + 1
-      si terminaron = 3
-        finalizar:= V 
-  fin       
+        LiberarEsquina(av, calle)
+        si ID = 1
+          EnviarMensaje(termine, r1)
+        si ID = 2
+          EnviarMensaje(termine, r2)
+        si ID = 3
+          EnviarMensaje(termine, r3)
+      sino
+        robotsTerminados:= robotsTerminados + 1
+  fin
 variables
-  r1: cliente
-  r2: cliente
-  r3: cliente
-  r4: servidor
+  r1: tipoCliente
+  r2: tipoCliente
+  r3: tipoCliente
+  rS: tipoServidor
 comenzar
-  AsignarArea(r1,areaRobots)
-  AsignarArea(r2,areaRobots)
-  AsignarArea(r3,areaRobots)
-  AsignarArea(r4,areaServidor)
-  AsignarArea(r4,areaRobots)
-  Iniciar(r1,1,1)
-  Iniciar(r2,2,1)
-  Iniciar(r3,3,1)
-  Iniciar(r4,100,100)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(rS, areaServidor)
+  AsignarArea(rS, area1)
+  AsignarArea(rS, area2)
+  AsignarArea(rS, area3)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,1)
+  Iniciar(r3, 3,1)
+  Iniciar(rS, 100, 100)
 fin

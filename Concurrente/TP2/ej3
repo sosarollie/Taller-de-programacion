@@ -1,98 +1,83 @@
-programa ej3
+programa TP2EJ3
 procesos
-  proceso juntarF (ES f: numero)
+  proceso juntarP (ES papeles: numero)
   comenzar
-    mientras HayFlorEnLaEsquina
-      tomarFlor
-      f:= f + 1
-  fin
-  
-  proceso juntarP (ES p: numero)
-  comenzar
-    mientras HayPapelEnLaEsquina
+    mientras(HayPapelEnLaEsquina)
       tomarPapel
-      p:= p + 1
+      papeles:= papeles + 1
+  fin
+  proceso juntarF (ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso recorridoP (ES papeles: numero)
+  comenzar
+    derecha
+    juntarP (papeles)
+    repetir 9
+      mover
+      juntarP (papeles)
+  fin
+  proceso recorridoF (ES flores: numero)
+  comenzar
+    derecha
+    juntarF (flores)
+    repetir 9
+      mover
+      juntarF (flores)
   fin
 areas
-  ciudad: AreaC(1,1,100,100)
+  area1: AreaP(1,1,10,1)
+  area2: AreaP(11,1,20,1)
+  area3: AreaP(1,5,10,5)
+  area4: AreaP(11,5,20,5)
 robots
   robot tipoA1
   variables
-    go: boolean
-    f: numero
+    papeles: numero
   comenzar
-    go:= V 
-    p:= 0
-    derecha
-    juntarF(f)
-    repetir 9
-      mover
-      juntarF(f)
-    EnviarMensaje(f,rA2)
-    EnviarMensaje(go,rA2)
+    papeles:= 0
+    recorridoP(papeles)
+    EnviarMensaje(papeles, A2)
   fin
-  
   robot tipoA2
   variables
-    go: boolean
-    f: numero
+    papeles: numero
   comenzar
-    go:= F
-    RecibirMensaje(f,rA1)
-    RecibirMensaje(go,rA1)
-    si go = V
-      derecha
-      juntarF(f)
-      repetir 9 
-        mover
-        juntarF(f)
-    Informar(f)
+    RecibirMensaje(papeles, A1)
+    recorridoP(papeles)
+    Informar(papeles)
   fin
   robot tipoB1
   variables
-    go: boolean
-    p: numero
+    flores: numero
   comenzar
-    go:= V 
-    p:= 0
-    derecha
-    juntarP(p)
-    repetir 9
-      mover
-      juntarP(p)
-    EnviarMensaje(p,rB2)
-    EnviarMensaje(go,rB2)
+    flores:= 0
+    recorridoF(flores)
+    EnviarMensaje(flores, B2)
   fin
-  
   robot tipoB2
   variables
-    go: boolean
-    p: numero
+    flores: numero
   comenzar
-    go:= F
-    RecibirMensaje(p,rB1)
-    RecibirMensaje(go,rB1)
-    si go = V
-      derecha
-      juntarP(p)
-      repetir 9
-        mover
-        juntarP(p)
-    Informar(p)
+    RecibirMensaje(flores, B1)
+    recorridoF(flores)
+    Informar(flores)
   fin
-
 variables
-  rA1: tipoA1
-  rA2: tipoA2
-  rB1: tipoB1
-  rB2: tipoB2
+  A1: tipoA1
+  A2: tipoA2
+  B1: tipoB1
+  B2: tipoB2
 comenzar
-  AsignarArea(rA1,ciudad)
-  AsignarArea(rA2,ciudad)
-  AsignarArea(rB1,ciudad)
-  AsignarArea(rB2,ciudad)
-  Iniciar(rA1,1,1)
-  Iniciar(rA2,11,1)
-  Iniciar(rB1,1,5)
-  Iniciar(rB2,11,5)
+  AsignarArea(A1, area1)
+  AsignarArea(A2, area2)
+  AsignarArea(B1, area3)
+  AsignarArea(B2, area4)
+  Iniciar(A1,1,1)
+  Iniciar(A2,11,1)
+  Iniciar(B1,1,5)
+  Iniciar(B2,11,5)
 fin

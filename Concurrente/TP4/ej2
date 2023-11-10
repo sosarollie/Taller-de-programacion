@@ -1,88 +1,97 @@
-programa ej2
+programa TP4EJ2
 procesos
-  proceso juntarP (ES p: numero)
+  proceso juntarP (ES cantActual: numero)
   comenzar
-    mientras HayPapelEnLaEsquina
+    si (HayPapelEnLaEsquina)
       tomarPapel
-      p:= p + 1
+      cantActual:= cantActual + 1
   fin
-  proceso recorridoProductores
-  variables
-    p: numero
-    av: numero
-    ca: numero
+  proceso depositarP
   comenzar
-    juntarP(p)
-    repetir 99
-      mover
-      juntarP(p)
-      si p = 5
-        av:= PosAv
-        ca:= PosCa
-        BloquearEsquina(50,50)
-        Pos(50,50)
-        repetir 5
-          si HayPapelEnLaBolsa
-            depositarPapel
-        p:= 0
-        Pos(av,ca)
-        LiberarEsquina(50,50)
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+  fin
+  proceso hayCantRequerida(E cantTomar: numero)
+  variables
+    cant: numero
+  comenzar
+    cant:= 0
+    mientras ((HayPapelEnLaEsquina) & (cant < cantTomar))
+      tomarPapel
+      cant:= cant + 1
+    si cant < cantTomar
+      depositarP
   fin
 areas
-  papelero: AreaC(50,50,50,50)
-  areaProductores: AreaPC(5,1,10,100)
-  areaConsumidores: AreaPC(11,1,12,1)
+  areaP1: AreaP(5,1,5,100)
+  areaP2: AreaP(10,1,10,100)
+  esquina50: AreaC(50,50,50,50)
+  areaC1: AreaP(11,1,11,1)
+  areaC2: AreaP(12,1,12,1)
 robots
-  robot productor
-  comenzar
-    recorridoProductores
-  fin
-  
-  robot consumidor
+  robot tipoProductor
   variables
-    cantRandom: numero
-    av: numero
-    ca: numero
-    intentos: numero
-    p: numero
+    cantActual: numero
+    avO: numero
+    caO: numero
   comenzar
-    av:= PosAv
-    ca:= PosCa
-    intentos:= 0
-    mientras intentos <> 8
-      Random(cantRandom,2,5)
+    avO:= PosAv
+    cantActual:= 0
+    mientras (PosCa < 100)
+      mientras (cantActual <> 5)
+        mientras((HayPapelEnLaEsquina) & (cantActual <> 5))
+          juntarP(cantActual)
+        si ~(HayPapelEnLaEsquina)
+          mover
+      caO:= PosCa
       BloquearEsquina(50,50)
       Pos(50,50)
-      repetir cantRandom
-        juntarP(p)
-      si p<>cantRandom
-        mientras HayPapelEnLaBolsa
-          depositarPapel
-        Pos(av,ca)
-        LiberarEsquina(50,50)
-        intentos:= intentos + 1
+      depositarP
+      Pos(avO, caO)
+      LiberarEsquina(50,50)
+      cantActual:= 0
+    mientras((HayPapelEnLaEsquina) & (cantActual <> 5))
+      juntarP(cantActual)
+  fin
+  robot tipoConsumidor
+  variables
+    cantTomar: numero
+    avO: numero
+    caO: numero
+    intentos: numero
+  comenzar
+    avO:= PosAv
+    caO:= PosCa
+    intentos:= 0
+    mientras (intentos <> 8)
+      Random(cantTomar, 2,5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      hayCantRequerida(cantTomar)
+      Pos(avO, caO)
+      LiberarEsquina(50,50)
+      si (HayPapelEnLaBolsa)
+        depositarP
+        intentos:= 0
       sino
-        Pos(av,ca)
-        LiberarEsquina(50,50)
-        mientras HayPapelEnLaBolsa
-          depositarPapel
-  fin             
+        intentos:= intentos + 1
+  fin  
 variables
-  p1: productor
-  p2: productor
-  c1: consumidor
-  c2: consumidor
+  p1: tipoProductor
+  p2: tipoProductor
+  c1: tipoConsumidor
+  c2: tipoConsumidor
 comenzar
-  AsignarArea(p1,papelero)
-  AsignarArea(p1,areaProductores)
-  AsignarArea(p2,papelero)
-  AsignarArea(p2,areaProductores)
-  AsignarArea(c1,papelero)
-  AsignarArea(c1,areaConsumidores)
-  AsignarArea(c2,papelero)
-  AsignarArea(c2,areaConsumidores)
-  Iniciar(p1,5,1)
-  Iniciar(p2,10,1)
-  Iniciar(c1,11,1)
-  Iniciar(c2,12,1)
+  AsignarArea(p1, areaP1)
+  AsignarArea(p2, areaP2)
+  AsignarArea(c1, areaC1)
+  AsignarArea(c2, areaC2)
+  AsignarArea(p1, esquina50)
+  AsignarArea(p2, esquina50)
+  AsignarArea(c1, esquina50)
+  AsignarArea(c2, esquina50)
+  Iniciar(p1, 5,1)
+  Iniciar(p2, 10,1)
+  Iniciar(c1, 11,1)
+  Iniciar(c2, 12,1)
 fin

@@ -1,136 +1,116 @@
-programa ej4
+programa TP2EJ4
 procesos
-  proceso juntar (ES cant: numero)
+  proceso juntar(ES cant: numero)
   comenzar
-    mientras HayFlorEnLaEsquina
+    mientras(HayFlorEnLaEsquina)
       tomarFlor
       cant:= cant + 1
-    mientras HayPapelEnLaEsquina
+    mientras(HayPapelEnLaEsquina)
       tomarPapel
       cant:= cant + 1
   fin
 areas
-  ciudad: AreaPC(25,25,75,75)
-  areaJefe: AreaP(1,1,1,1)
-  areaR1: AreaP(25,1,25,1)
-  areaR2: AreaP(30,1,30,1)
-  areaR3: AreaP(35,1,35,1)
-  areaR4: AreaP(40,1,40,1)
+  areaF: AreaP(1,1,1,1)
+  area1: AreaP(25,1,25,1)
+  area2: AreaP(30,1,30,1)
+  area3: AreaP(35,1,35,1)
+  area4: AreaP(40,1,40,1)
+  areaRobots: AreaPC(25,25,75,75)
 robots
-  robot tipo1
+  robot tipoF
   variables
-    max: numero
-    go: boolean
-    f: numero
-    maxRobot: numero
-    numRobot: numero
+    idGanador: numero
+    id: numero
+    ingreso: boolean
+    termino: boolean
+    cantGanador: numero
+    cantRobot: numero
     aux: numero
-    ganador: boolean
   comenzar
-    max:= -1
-    go:= V
-    EnviarMensaje(1,r1)
-    EnviarMensaje(2,r2)
-    EnviarMensaje(3,r3)
-    EnviarMensaje(4,r4)
-    repetir 10
+    termino:= F
+    cantGanador:= 0
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+    repetir 9
       Random(aux,1,4)
       si (aux = 1)
-        EnviarMensaje(go,r1)
+        EnviarMensaje(ingreso, r1)
       si (aux = 2)
-        EnviarMensaje(go,r2)
-      si (aux = 3) 
-        EnviarMensaje(go,r3)
-      sino 
-        EnviarMensaje(go,r4)
-      RecibirMensaje(go,*)
+        EnviarMensaje(ingreso, r2)
+      si (aux = 3)
+        EnviarMensaje(ingreso,r3)
+      si (aux = 4)
+        EnviarMensaje(ingreso, r4)
+      RecibirMensaje(ingreso, *)
+    termino:= V
+    EnviarMensaje(termino, r1)
+    EnviarMensaje(termino, r2)
+    EnviarMensaje(termino, r3)
+    EnviarMensaje(termino, r4)
     repetir 4
-      RecibirMensaje(numRobot,*)
-      si numRobot = 1
-        RecibirMensaje(f,r1)
-      si numRobot = 2
-        RecibirMensaje(f,r2)
-      si numRobot = 3
-        RecibirMensaje(f,r3)
-      sino
-        RecibirMensaje(f,r4)
-      si f>max
-        maxRobot:= numRobot            
-    go:= F
-    EnviarMensaje(go,r1)
-    EnviarMensaje(go,r2)
-    EnviarMensaje(go,r3)
-    EnviarMensaje(go,r4)
-    repetir 4
-      si maxRobot = 1
-        ganador:= V
-      sino
-        ganador:= F
-      EnviarMensaje(ganador,r1) 
-      si maxRobot = 2
-        ganador:= V
-      sino
-        ganador:= F
-      EnviarMensaje(ganador,r2)
-      si maxRobot = 3
-        ganador:= V
-      sino
-        ganador:= F
-      EnviarMensaje(ganador,r3)   
-      si maxRobot = 4
-        ganador:= V
-      sino
-        ganador:= F
-      EnviarMensaje(ganador,r4)      
+      RecibirMensaje(cantRobot, *)
+      RecibirMensaje(id, *)
+      si (cantRobot > cantGanador)
+        cantGanador:= cantRobot
+        idGanador:= id
+    EnviarMensaje(idGanador, r1)
+    EnviarMensaje(idGanador, r2)
+    EnviarMensaje(idGanador, r3)
+    EnviarMensaje(idGanador, r4)
   fin
-  robot tipo2
+  robot tipoR
   variables
+    cant: numero
+    termino: boolean
+    ingreso: boolean
+    avInicial: numero
+    caInicial: numero
     av: numero
     ca: numero
-    avO: numero
-    caO: numero
-    cant: numero
-    go: boolean
-    quienSoy: numero
-    ganador: boolean
+    id: numero
+    idGanador: numero
   comenzar
-    avO:= PosAv
-    caO:= PosCa
-    RecibirMensaje(quienSoy,r5)
-    RecibirMensaje(go,r5)
-    mientras go = V
-      Random(av,25,75)
-      Random(ca,25,75)
+    cant:= 0
+    termino:= F
+    avInicial:= PosAv
+    caInicial:= 1
+    RecibirMensaje(id, rF)
+    RecibirMensaje(termino, rF)
+    mientras (termino = F)
+      Random(av, 25,75)
+      Random(ca, 25,75)
       Pos(av,ca)
       juntar(cant)
-      Pos(avO,caO)
-      EnviarMensaje(go,r5)
-      RecibirMensaje(go,r5)
-    EnviarMensaje(quienSoy,r5)
-    EnviarMensaje(cant,r5)
-    RecibirMensaje(ganador,r5)
-    si ganador = V
-      Pos(50,50)      
-  fin
+      EnviarMensaje(termino, rF)
+      Pos(avInicial,caInicial)
+      RecibirMensaje(termino, rF)
+    EnviarMensaje(cant, rF)
+    EnviarMensaje(id, rF)
+    RecibirMensaje(idGanador, rF)
+    si (idGanador = id)
+      Pos(50,50)
+  fin  
 variables
-  r1: tipo1
-  r2: tipo1
-  r3: tipo1
-  r4: tipo1
-  r5: tipo2
+  r1: tipoR
+  r2: tipoR
+  r3: tipoR
+  r4: tipoR
+  rF: tipoF
 comenzar
-  AsignarArea(r1,ciudad)
-  AsignarArea(r1,areaR1)
-  AsignarArea(r2,ciudad)
-  AsignarArea(r2,areaR2)
-  AsignarArea(r3,ciudad)
-  AsignarArea(r3,areaR3)
-  AsignarArea(r4,ciudad)
-  AsignarArea(r4,areaR4)
-  AsignarArea(r5,areaJefe)
+  AsignarArea(r1, areaRobots)
+  AsignarArea(r2, areaRobots)
+  AsignarArea(r3, areaRobots)
+  AsignarArea(r4, areaRobots)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(r4, area4)
+  AsignarArea(rF, areaF)
   Iniciar(r1,25,1)
   Iniciar(r2,30,1)
   Iniciar(r3,35,1)
   Iniciar(r4,40,1)
-  Iniciar(r5,1,1) 
+  Iniciar(rF,1,1)
 fin

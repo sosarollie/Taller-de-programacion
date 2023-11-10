@@ -1,43 +1,42 @@
 programa TP1EJ4
 procesos
-  proceso recorrerAvenidaFlor
+  proceso juntarF
   comenzar
-    si HayFlorEnLaEsquina
+    mientras(HayFlorEnLaEsquina)
       tomarFlor
-    repetir 99
-      mover
-      si HayFlorEnLaEsquina
-        tomarFlor
   fin
-  
-  proceso recorrerAvenidaPapel
+  proceso juntarP
   comenzar
-    si HayPapelEnLaEsquina
+    mientras(HayPapelEnLaEsquina)
       tomarPapel
+  fin
+  proceso recorrerAvenidaPapeles
+  comenzar
+    juntarP
     repetir 99
       mover
-      si HayPapelEnLaEsquina
-        tomarPapel
+      juntarP
   fin
-  
-  proceso recorrerAreaImpar
+  proceso recorrerAvenidaFlores
   comenzar
-    recorrerAvenidaFlor
-    Pos(PosAv + 1,1)
-    repetir 23
-      recorrerAvenidaFlor
-      Pos(PosAv + 1,1)   
-    recorrerAvenidaFlor
+    juntarF
+    repetir 99
+      mover
+      juntarF
   fin
-    
-  proceso recorrerAreaPar
+  proceso recorridoPapeles
   comenzar
-    recorrerAvenidaPapel
-    Pos(PosAv + 1,1)
-    repetir 23
-      recorrerAvenidaPapel
+    repetir 24
+      recorrerAvenidaPapeles
       Pos(PosAv + 1,1)
-    recorrerAvenidaPapel
+    recorrerAvenidaPapeles
+  fin
+  proceso recorridoFlores
+  comenzar
+    repetir 24
+      recorrerAvenidaFlores
+      Pos(PosAv + 1,1)
+    recorrerAvenidaFlores
   fin
 areas
   area1: AreaP(1,1,25,100)
@@ -47,25 +46,24 @@ areas
 robots
   robot tipoImpar
   comenzar
-    recorrerAreaImpar
-    Pos(51,1)
-    recorrerAreaImpar
+    recorridoFlores
+    Pos(PosAv + 26, 1)
+    recorridoFlores
   fin
-  
   robot tipoPar
   comenzar
-    recorrerAreaPar
-    Pos(76,1)
-    recorrerAreaPar
+    recorridoPapeles
+    Pos(PosAv + 26, 1)
+    recorridoPapeles
   fin
 variables
-  r1: tipoImpar
-  r2: tipoPar
+  robot1: tipoImpar
+  robot2: tipoPar
 comenzar
-  AsignarArea(r1,area1)
-  AsignarArea(r2,area2)
-  AsignarArea(r1,area3)
-  AsignarArea(r2,area4)
-  Iniciar(r1,1,1)
-  Iniciar(r2,26,1)
+  AsignarArea(robot1,area1)
+  AsignarArea(robot1,area3)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot2,area4)
+  Iniciar(robot1, 1,1)
+  Iniciar(robot2, 26,1)
 fin

@@ -1,72 +1,89 @@
 programa TP1EJ5
 procesos
-  proceso juntarFlor
+  proceso juntarF
   comenzar
-    mientras HayFlorEnLaEsquina
+    mientras(HayFlorEnLaEsquina)
       tomarFlor
   fin
-  
-  proceso juntarPapel
+  proceso juntarP
   comenzar
-    mientras HayPapelEnLaEsquina
+    mientras(HayPapelEnLaEsquina)
       tomarPapel
   fin
-  
-  proceso recorrerCallePapel
+  proceso depositarF
   comenzar
-    juntarPapel
-    repetir 19
-      mover
-      juntarPapel
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
   fin
-  
-  proceso recorrerCalleFlor
+  proceso depositarP
   comenzar
-    juntarFlor
-    repetir 19
+    mientras(HayPapelEnLaBolsa)
+      depositarPapel
+  fin
+  proceso recorridoFlores
+  comenzar
+    juntarF
+    repetir 15
       mover
-      juntarFlor
-  fin  
+      juntarF
+    depositarF
+  fin
+  proceso recorridoPapeles
+  comenzar
+    juntarP
+    repetir 10
+      mover
+      juntarP
+    depositarP
+  fin   
 areas
-  area1: AreaP(1,75,20,80)
-  area2: AreaP(75,81,80,100)
-  area3: AreaP(81,10,100,15)
-  area4: AreaP(10,1,15,20)
+  area1: AreaP(1,75,16,80)
+  area2: AreaP(75,80,80,100)
+  area3: AreaP(70,10,100,15)
+  area4: AreaP(10,1,15,11)
 robots
-  robot tipoFlor
+  robot tipo1
   comenzar
     derecha
-    recorrerCalleFlor
-    mientras HayFlorEnLaBolsa
-      depositarFlor
-    Pos(PosAv - 19,PosCa + 5)
-    recorrerCalleFlor
-    mientras HayFlorEnLaBolsa
-      depositarFlor
+    recorridoFlores
+    Pos(1, PosCa + 5)
+    recorridoFlores
   fin
-  
-  robot tipoPapel
+  robot tipo2
   comenzar
-    recorrerCallePapel
-    mientras HayPapelEnLaBolsa
-      depositarPapel
-    Pos(PosAv + 5,PosCa - 19)
-    recorrerCallePapel
-    mientras HayPapelEnLaBolsa
-      depositarPapel
+    repetir 2
+      recorridoPapeles
+    Pos(PosAv + 5, 80)
+    repetir 2
+      recorridoPapeles
+  fin
+  robot tipo3
+  comenzar
+    derecha
+    repetir 2
+      recorridoFlores
+    Pos(70, PosCa + 5)
+    repetir 2
+      recorridoFlores
+  fin
+  robot tipo4
+  comenzar
+    recorridoPapeles
+    Pos(PosAv + 5, 1)
+    recorridoPapeles
   fin
 variables
-  r1: tipoFlor
-  r2: tipoPapel
-  r3: tipoFlor
-  r4: tipoPapel
+  robot1: tipo1
+  robot2: tipo2
+  robot3: tipo3
+  robot4: tipo4
 comenzar
-  AsignarArea(r1,area1)
-  AsignarArea(r2,area2)
-  AsignarArea(r3,area3)
-  AsignarArea(r4,area4)
-  Iniciar(r1,1,75)
-  Iniciar(r2,75,81)
-  Iniciar(r3,81,10)
-  Iniciar(r4,10,1)
+  AsignarArea(robot1, area1)
+  AsignarArea(robot2, area2)
+  AsignarArea(robot3, area3)
+  AsignarArea(robot4, area4)
+  Iniciar(robot1, 1,75)
+  Iniciar(robot2, 75,80)
+  Iniciar(robot3, 70,10)
+  Iniciar(robot4, 10,1)
 fin
