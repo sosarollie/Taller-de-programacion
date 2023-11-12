@@ -1,0 +1,114 @@
+programa TP5EJ4
+procesos
+  proceso juntarF
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso accederCuadrante(E avO: numero; E av: numero; E ca: numero)
+  comenzar
+    BloquearEsquina(av, ca)
+    Pos(av,ca)
+    juntarF
+    Pos(avO, 1)
+    LiberarEsquina(av, ca)
+  fin
+areas
+  area1: AreaP(1,1,1,1)
+  area2: AreaP(2,1,2,1)
+  area3: AreaP(3,1,3,1)
+  areaC: AreaPC(40,40,60,60)
+  area10: AreaC(10,10,10,10)
+  areaFis: AreaP(4,1,4,1)
+robots
+  robot tipoFlorero
+  variables
+    av: numero
+    ca: numero
+    avO: numero
+    terminar: numero
+    miTurno: boolean
+  comenzar
+    terminar:= 0
+    avO:= PosAv
+    mientras (terminar = 0)
+      RecibirMensaje(terminar, rFis)
+      si miTurno = V
+        RecibirMensaje(av, ca)
+        accederCuadrante(avO, av, ca)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    Pos(avO, 1)
+    LiberarEsquina(10,10)
+    EnviarMensaje(terminar, rFis)
+  fin
+  robot tipoFis
+  variables
+    av: numero
+    ca: numero
+    terminar: numero
+    turno: boolean
+    numRobot: numero
+    cantFlores: numero
+  comenzar
+    cantFlores:= 0
+    repetir 8
+      Random(av, 40,60)
+      Random(ca, 40,60)
+      Random(numRobot, 1,3)
+      EnviarMensaje(0, r1)
+      EnviarMensaje(0, r2)
+      EnviarMensaje(0, r3)
+      si numRobot = 1
+        turno:= F
+        EnviarMensaje(turno, r2)
+        EnviarMensaje(turno, r3)
+        turno:= V
+        EnviarMensaje(turno, r1)
+      si numRobot = 2
+        turno:= F
+        EnviarMensaje(turno, r1)
+        EnviarMensaje(turno, r3)
+        turno:= V
+        EnviarMensaje(turno, r2)
+      sino
+        turno:= F
+        EnviarMensaje(turno, r1)
+        EnviarMensaje(turno, r2)
+        turno:= V
+        EnviarMensaje(turno, r3)
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    repetir 3
+      RecibirMensaje(terminar, *)
+    Pos(10,10)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:= cantFlores + 1
+    Informar(cantFlores)
+  fin
+variables
+  r1: tipoFlorero
+  r2: tipoFlorero
+  r3: tipoFlorero
+  rFis: tipoFis
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(rFis, areaFis)
+  AsignarArea(r1, areaC)
+  AsignarArea(r2, areaC)
+  AsignarArea(r3, areaC)
+  AsignarArea(r1, area10)
+  AsignarArea(r2, area10)
+  AsignarArea(r3, area10)
+  AsignarArea(rFis, area10)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,1)
+  Iniciar(r3, 3,1)
+  Iniciar(rFis, 4,1)
+fin

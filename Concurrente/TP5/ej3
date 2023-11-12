@@ -1,0 +1,86 @@
+programa TP5EJ3
+procesos
+  proceso juntarF (ES cantFlores: numero)
+  comenzar
+    tomarFlor
+    cantFlores:= cantFlores + 1
+  fin
+  proceso depositarF
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso acceder10(E caO: numero; E avAct: numero)
+  comenzar
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    depositarF
+    Pos(avAct, caO)
+    LiberarEsquina(10,10)
+  fin
+areas
+  area1: AreaP(1,3,100,3)
+  area2: AreaP(1,4,100,4)
+  areaCos: AreaP(1,5,1,5)
+  area10: AreaC(10,10,10,10)
+robots
+  robot tipoRecolector
+  variables
+    cantFlores: numero
+    esquinasAvanzadas: numero
+    avAct: numero
+    caO: numero
+  comenzar
+    derecha
+    caO:= PosCa
+    mientras (PosAv < 100)
+      esquinasAvanzadas:= 0
+      cantFlores:= 0
+      esquinasAvanzadas:= 0
+      mientras ((cantFlores <> 10) & (esquinasAvanzadas <> 5))
+        mientras ((HayFlorEnLaEsquina) & (cantFlores <> 10))
+          juntarF(cantFlores)
+        si ((cantFlores <> 10) & (PosAv < 100))
+          mover
+          esquinasAvanzadas:= esquinasAvanzadas + 1
+      avAct:= PosAv
+      acceder10(caO, avAct)
+      EnviarMensaje(0, rCos)
+    EnviarMensaje(1, rCos)
+  fin
+  robot tipoCosechador
+  variables
+    cantFlores: numero
+    terminaron: numero
+    termino: numero
+  comenzar
+    terminaron:= 0
+    cantFlores:= 0
+    mientras (terminaron <> 2)
+      RecibirMensaje(termino, *)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        cantFlores:= cantFlores + 1
+      Pos(1,5)
+      LiberarEsquina(10,10)
+      si (termino = 1)
+        terminaron:= terminaron + 1
+    Informar(cantFlores)
+  fin
+variables
+  r1: tipoRecolector
+  r2: tipoRecolector
+  rCos: tipoCosechador
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(rCos, areaCos)
+  AsignarArea(r1, area10)
+  AsignarArea(r2, area10)
+  AsignarArea(rCos, area10)
+  Iniciar(r1, 1,3)
+  Iniciar(r2, 1,4)
+  Iniciar(rCos, 1,5)
+fin

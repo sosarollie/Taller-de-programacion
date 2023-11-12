@@ -1,114 +1,91 @@
-programa ej4
+programa TP4EJ4
 procesos
-  proceso recogerFlores(E av:numero; E ca:numero; E avAnt:numero; E caAnt: numero; E cant: numero)
+  proceso recogerF
   comenzar
-    BloquearEsquina(av,ca)
-    Pos(av,ca)
-    si cant <> 0
-      LiberarEsquina(avAnt,caAnt)
-    mientras HayFlorEnLaEsquina
-      tomarFlor
+    si (HayFlorEnLaEsquina)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
   fin
-  proceso recogerPapeles(E av:numero; E ca:numero; E avAnt:numero; E caAnt: numero; E cant: numero)
+  proceso recogerP
   comenzar
-    BloquearEsquina(av,ca)
-    Pos(av,ca)
-    si cant <> 0
-      LiberarEsquina(avAnt,caAnt)
-    mientras HayPapelEnLaEsquina
-      tomarPapel
+    si(HayPapelEnLaEsquina)
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
   fin
-  proceso vaciarBolsa(E av: numero; E ca: numero; E avAnt: numero; E caAnt: numero; E cant: numero)
-  comenzar 
-    BloquearEsquina(av,ca)
-    Pos(av,ca)
-    si cant <> 0
-      LiberarEsquina(avAnt,caAnt)
-    mientras HayPapelEnLaBolsa
+  proceso vaciar
+  comenzar
+    mientras(HayPapelEnLaBolsa)
       depositarPapel
-    mientras HayFlorEnLaBolsa
+    mientras(HayFlorEnLaBolsa)
       depositarFlor
   fin
 areas
-  areaSlaves: AreaPC(2,1,100,100)
-  areaMaster: AreaP(1,1,1,1)
+  areaJ: AreaP(1,1,1,1)
+  area1: AreaP(2,1,2,1)
+  area2: AreaP(3,1,3,1)
+  areaPC: AreaPC(2,2,100,100)
 robots
-  robot slave
+  robot tipoJefe
   variables
-    tarea: numero
-    quienSoy: numero
+    numTarea: numero
     av: numero
     ca: numero
-    avAnt: numero
-    caAnt: numero
-    cant: numero
-    finalizar: boolean
-    termine: boolean
-  comenzar
-    RecibirMensaje(quienSoy,m)
-    finalizar:= F
-    cant:= 0
-    mientras finalizar = F
-      RecibirMensaje(tarea,m)
-      EnviarMensaje(quienSoy,m)
-      si tarea <> 4
-        RecibirMensaje(av,m)
-        RecibirMensaje(ca,m)
-      si tarea = 1
-        recogerFlores(av,ca,avAnt,caAnt,cant)
-      si tarea = 2
-        recogerPapeles(av,ca,avAnt,caAnt,cant)
-      si tarea = 3
-        vaciarBolsa(av,ca,avAnt,caAnt,cant)
-      si tarea = 4
-        finalizar:= V
-      EnviarMensaje(termine,m)
-      avAnt:= av
-      caAnt:= ca
-      cant:= 1
-  fin
-  robot master
-  variables
-    quienEs: numero
+    numRobot: numero
     ack: boolean
-    tarea: numero
+  comenzar
+    repetir 10
+      Random(numTarea, 1,3)
+      Random(av, 2,100)
+      Random(ca, 2,100)
+      Random(numRobot, 1,2)
+      si numRobot = 1
+        EnviarMensaje(numTarea, r1)
+        EnviarMensaje(av, r1)
+        EnviarMensaje(ca, r1)
+      sino
+        EnviarMensaje(numTarea, r2)
+        EnviarMensaje(av, r2)
+        EnviarMensaje(ca, r2)
+      RecibirMensaje(ack, *)
+    EnviarMensaje(4, r1)
+    EnviarMensaje(4, r2)
+  fin
+  robot tipoTrabajador
+  variables
+    numTarea: numero
     av: numero
     ca: numero
-    enviar: numero
-    end: numero
+    terminar: boolean
+    ack: boolean
   comenzar
-    EnviarMensaje(1,s1)
-    EnviarMensaje(2,s2)
-    repetir 10
-      Random(tarea,1,3)
-      Random(av,2,100)
-      Random(ca,2,100)
-      Random(enviar,1,2)
-      si enviar = 1
-        EnviarMensaje(tarea,s1)
-      si enviar = 2
-        EnviarMensaje(tarea,s2)
-      RecibirMensaje(quienEs,*)
-      si quienEs = 1
-        EnviarMensaje(av,s1)
-        EnviarMensaje(ca,s1)
-      si quienEs = 2
-        EnviarMensaje(av,s2)
-        EnviarMensaje(ca,s2)
-      RecibirMensaje(ack,*)
-    tarea:= 4
-    EnviarMensaje(tarea,s1)
-    EnviarMensaje(tarea,s2)
+    terminar:= F
+    mientras terminar = F
+      RecibirMensaje(numTarea, rJefe)
+      si numTarea <> 4
+        RecibirMensaje(av, rJefe)
+        RecibirMensaje(ca, rJefe)
+        Pos(av,ca)
+      si numTarea = 1
+        recogerF
+      si numTarea = 2
+        recogerP
+      si numTarea = 3
+        vaciar
+      si numTarea = 4
+        terminar:= V
+      EnviarMensaje(ack, rJefe)
   fin
 variables
-  s1: slave
-  s2: slave
-  m: master
+  r1: tipoTrabajador
+  r2: tipoTrabajador
+  rJefe: tipoJefe
 comenzar
-  AsignarArea(s1,areaSlaves)
-  AsignarArea(s2,areaSlaves)
-  AsignarArea(m,areaMaster)
-  Iniciar(s1,2,1)
-  Iniciar(s2,3,1)
-  Iniciar(m,1,1)
+  AsignarArea(r1, area1)
+  AsignarArea(r1, areaPC)
+  AsignarArea(r2, area2)
+  AsignarArea(r2, areaPC)
+  AsignarArea(rJefe, areaJ)
+  Iniciar(rJefe, 1,1)
+  Iniciar(r1, 2,1)
+  Iniciar(r2, 3,1)
 fin

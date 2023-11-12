@@ -1,66 +1,62 @@
-programa ej3a
+programa TP4EJ3A
 procesos
   proceso juntarP
   comenzar
-    mientras HayPapelEnLaEsquina
+    mientras(HayPapelEnLaEsquina)
       tomarPapel
   fin
-  proceso recorrido
-  comenzar
-    juntarP
-    repetir 5
-      mover
-      juntarP
-  fin
 areas
-  areaRobots: AreaPC(1,1,3,100)
-  areaJefe: AreaP(5,1,5,1)
+  area1: AreaP(1,1,1,100)
+  area2: AreaP(2,1,2,100)
+  area3: AreaP(3,1,3,100)
+  areaCoor: AreaP(4,1,4,1)
 robots
-  robot tipo1
+  robot tipoR
   variables
     quienSoy: numero
-    quienEs: numero
-    seguir: boolean
-    llegue: boolean
+    termine: boolean
   comenzar
-    RecibirMensaje(quienSoy,r4)
-    repetir 19
-      recorrido
-      si quienSoy = 1
-        EnviarMensaje(quienSoy,r2)
-        EnviarMensaje(quienSoy,r3)
-      si quienSoy = 2
-        EnviarMensaje(quienSoy,r1)
-        EnviarMensaje(quienSoy,r3)
-      si quienSoy = 3
-        EnviarMensaje(quienSoy,r1)
-        EnviarMensaje(quienSoy,r2)
-      repetir 2
-        RecibirMensaje(quienEs,*)
-    repetir 4
-      mover
+    RecibirMensaje(quienSoy, rCoor)
+    mientras (PosCa < 100)
+      repetir 5
+        juntarP
+        si (PosCa < 100)
+          mover
       juntarP
+      si quienSoy = 1
+        EnviarMensaje(termine, r2)
+        EnviarMensaje(termine, r3)
+        RecibirMensaje(termine,r2)
+        RecibirMensaje(termine,r3)
+      si quienSoy = 2
+        EnviarMensaje(termine, r1)
+        EnviarMensaje(termine, r3)
+        RecibirMensaje(termine, r1)
+        RecibirMensaje(termine, r3)
+      si quienSoy = 3
+        EnviarMensaje(termine, r1)
+        EnviarMensaje(termine, r2)
+        RecibirMensaje(termine, r1)
+        RecibirMensaje(termine, r2)
   fin
-  robot tipo2
-  variables
-    numRobot: numero
+  robot tipoCoor
   comenzar
-    EnviarMensaje(1,r1)
-    EnviarMensaje(2,r2)
-    EnviarMensaje(3,r3)
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
   fin
 variables
-  r1: tipo1
-  r2: tipo1
-  r3: tipo1
-  r4: tipo2
+  r1: tipoR
+  r2: tipoR
+  r3: tipoR
+  rCoor: tipoCoor
 comenzar
-  AsignarArea(r1,areaRobots)
-  AsignarArea(r2,areaRobots)
-  AsignarArea(r3,areaRobots)
-  AsignarArea(r4,areaJefe)
-  Iniciar(r1,1,1)
-  Iniciar(r2,2,1)
-  Iniciar(r3,3,1)
-  Iniciar(r4,5,1)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(rCoor, areaCoor)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,1)
+  Iniciar(r3, 3,1)
+  Iniciar(rCoor, 4,1)
 fin

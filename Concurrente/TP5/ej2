@@ -1,0 +1,112 @@
+programa TP5EJ2
+procesos
+  proceso juntarF
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso depositarF
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso acceder50 (E calleO: numero; E avActual: numero)
+  comenzar
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    depositarF
+    Pos(avActual, calleO)
+    LiberarEsquina(50,50)
+  fin
+areas
+  area1: AreaP(1,1,100,1)
+  area2: AreaP(1,2,100,2)
+  area3: AreaP(1,3,100,3)
+  areaFis: AreaP(1,4,1,4)
+  area50: AreaC(50,50,50,50)
+robots
+  robot tipoRecolector
+  variables
+    calleO: numero
+    avActual: numero
+    quienSoy: numero
+    termine: boolean
+  comenzar
+    RecibirMensaje(quienSoy, rFis)
+    calleO:= PosCa
+    juntarF
+    derecha
+    repetir 9
+      mover
+      juntarF
+    avActual:= PosAv
+    acceder50(calleO, avActual)
+    si quienSoy = 1
+      EnviarMensaje(termine, r2)
+      EnviarMensaje(termine, r3)
+    si quienSoy = 2
+      EnviarMensaje(termine, r1)
+      EnviarMensaje(termine, r3)
+    si quienSoy = 3
+      EnviarMensaje(termine, r1)
+      EnviarMensaje(termine, r2)
+    repetir 2
+      RecibirMensaje(termine, *)
+    repetir 9
+      repetir 10
+        mover
+        juntarF
+      avActual:= PosAv
+      acceder50(calleO, avActual)
+      si quienSoy = 1
+        EnviarMensaje(termine, r2)
+        EnviarMensaje(termine, r3)
+      si quienSoy = 2
+        EnviarMensaje(termine, r1)
+        EnviarMensaje(termine, r3)
+      si quienSoy = 3
+        EnviarMensaje(termine, r1)
+        EnviarMensaje(termine, r2)
+      repetir 2
+        RecibirMensaje(termine, *)
+    EnviarMensaje(termine, rFis)
+  fin
+  robot tipoFis
+  variables
+    termino: boolean
+    cantFlores: numero
+  comenzar
+    cantFlores:= 0
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    repetir 3
+      RecibirMensaje(termino, *)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        cantFlores:= cantFlores + 1
+      Pos(1,4)
+      LiberarEsquina(50,50)
+    Informar(cantFlores)
+  fin
+variables
+  r1: tipoRecolector
+  r2: tipoRecolector
+  r3: tipoRecolector
+  rFis: tipoFis
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(rFis, areaFis)
+  AsignarArea(r1, area50)
+  AsignarArea(r2, area50)
+  AsignarArea(r3, area50)
+  AsignarArea(rFis, area50)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 1,2)
+  Iniciar(r3, 1,3)
+  Iniciar(rFis, 1,4)
+fin
